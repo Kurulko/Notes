@@ -1,0 +1,14 @@
+<nav class="left-panel bg-dark">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <br>
+        <div *ngIf="isAuthenticated" class="btn-group-vertical">
+            <a routerLink="/home" class="btn btn-dark ml-auto text-white">Home</a><br>
+            <a routerLink="/users" class="btn btn-dark ml-auto text-white">Users</a><br>
+        </div>
+        <div *ngIf="!isAuthenticated" class="btn-group-vertical">
+            <a routerLink="/login" class="btn btn-dark ml-auto text-white">Login</a><br>
+            <a routerLink="/register" class="btn btn-dark ml-auto text-white">Register</a><br>
+        </div>
+    </div>
+</nav>
+  

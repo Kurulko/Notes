@@ -1,0 +1,22 @@
+﻿<div class="container-fluid">
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark header-panel">
+    <div class="container">
+      <button type="button" mat-button class="btn btn-light" (click)="drawer.toggle()">
+        <i class="fas fa-bars"></i> Menu
+      </button>
+      <a class="navbar-brand" href="">{{title}}</a>
+      <button mat-button [routerLink]="['./logout']" class="btn btn-dark text-white text-right" >Logout</button>
+    </div>
+  </header>
+  <div class="row">
+    <div class="col-md-2">
+      <mat-drawer #drawer mode="side" class="left-panel">
+        <app-left-panel-layout [isAuthenticated]="authentication" />
+      </mat-drawer>
+    </div>
+    <div class="col-md-10">
+      <br />
+      <router-outlet />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Enter your name!" class="form-control" [(ngModel)]="loginModel.name"/>
+        </div>
+        <br />
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Enter your password!" [(ngModel)]="loginModel.password"/>
+        </div>
+        <br />
+        <div class="form-check">
+            <label class="form-check-label">Remember me?</label>
+            <input type="checkbox" class="form-check-input" placeholder="Remember me" [(ngModel)]="loginModel.rememberMe"/>
+        </div>
+        <br />
+        <button class="btn btn-outline-primary" (click)="account()">Send</button>
+    </div>
+</div>
