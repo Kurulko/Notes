@@ -6,6 +6,7 @@
 /angularapp/node_modules/
 /angularapp/obj/
 .angular/cache/
+/angularapp/.angular/cache/
 
 # User-specific files
 *.rsuser
