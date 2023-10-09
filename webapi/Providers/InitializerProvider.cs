@@ -1,5 +1,5 @@
-﻿using Notes.Interfaces.Repositories.RoleRepositories;
-using Notes.Interfaces.Repositories.UserRepositories;
+﻿using Notes.Interfaces.Repositories.AdminRepositories.RoleRepositories;
+using Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;
 using WebApi.Initializers;
 
 namespace Notes.WebApi.Providers;

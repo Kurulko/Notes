@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class NoteItemService extends NoteModelService<NoteItem> {
     constructor(httpClient: HttpClient, helper: Helpers) {
-        super(httpClient, helper, 'noteItems');
+        super(httpClient, helper, 'notes-items');
     }
 }
     

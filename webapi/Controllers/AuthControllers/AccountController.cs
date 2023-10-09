@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Models.Database;
 using Notes.ViewModels.Account;
-using Notes.ViewModels.Database;
+using Notes.ViewModels.Database.AdminModels;
 
 namespace WebApi.Controllers.AuthControllers;
 

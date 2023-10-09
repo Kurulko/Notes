@@ -1,5 +1,5 @@
-﻿using Notes.Models.Database;
-using Notes.ViewModels.Database;
+﻿using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Database.AdminModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -21,6 +21,7 @@ public class AccountModel
 
     public static explicit operator User(AccountModel accountModel)
         => new() { UserName = accountModel.Name };
+
     public static explicit operator UserViewModel(AccountModel accountModel)
         => new() { UserName = accountModel.Name };
 }

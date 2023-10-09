@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Notes.Commons.Settings;
 using Notes.Interfaces.Repositories.AuthRepositories;
-using Notes.Models.Database;
+using Notes.Models.Database.AdminModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

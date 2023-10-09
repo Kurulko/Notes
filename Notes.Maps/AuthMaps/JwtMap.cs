@@ -2,8 +2,8 @@
 using Notes.Commons;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Interfaces.Services.AuthServices;
-using Notes.Models.Database;
-using Notes.ViewModels.Database;
+using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Database.AdminModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

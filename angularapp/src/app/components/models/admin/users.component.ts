@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/models/admin/user.service';
     templateUrl: './users.component.html',
     providers: [ UserService ]
 })
-export class RolesComponent extends AdminModelsComponent<User> {
+export class UsersComponent extends AdminModelsComponent<User> {
     constructor(userService: UserService){
         super(userService);
     }

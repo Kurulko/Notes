@@ -4,6 +4,7 @@ import { NoteItemService } from 'src/app/services/models/notes/note-item.service
 import { ModelsComponent } from '../models.component';
 import { NoteModelService } from 'src/app/services/models/notes/note-model.service';
 import { AdminModelService } from 'src/app/services/models/admin/admin-model.service';
+import { AdminModel } from 'src/app/models/database/admin/admin-model';
 
 @Component({
     selector: 'admin-models-app',

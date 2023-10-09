@@ -1,4 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { DbModel } from 'src/app/models/database/db-model';
+import { IndexViewModel } from 'src/app/models/helpers/index-view-model';
 import { ModelsService } from 'src/app/services/models/models.service';
 import { NoteItemService } from 'src/app/services/models/notes/note-item.service';
 
@@ -8,10 +10,10 @@ import { NoteItemService } from 'src/app/services/models/notes/note-item.service
 })
 export abstract class ModelsComponent<T extends DbModel, K extends string|number> implements OnInit {
     @ViewChild('readOnlyTemplate', {static: false})
-    readOnlyTemplate: TemplateRef<any>|undefined;
+    readOnlyTemplate: TemplateRef<any>|null;
 
     @ViewChild('editTemplate', {static: false})
-    editTemplate: TemplateRef<any>|undefined;
+    editTemplate: TemplateRef<any>|null;
 
     models: T[];
     editedModel: T|null = null;
@@ -25,8 +27,8 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     }
 
     private loadModels(){
-        this.modelsService.getModels().subscribe((models: T[]) => {
-            this.models = models;
+        this.modelsService.getModels().subscribe((indexViewModel: IndexViewModel<T>) => {
+            this.models = indexViewModel.models;
         })
     }
 
@@ -38,7 +40,6 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
         this.isNewRecord = true;
     }
 
-    // abstract editModel(model: T): void;
     editModel(model: T){
         this.editedModel = {...model};
     }
@@ -52,12 +53,16 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     saveModel() {
         if(this.isNewRecord) {
             this.modelsService.createModel(this.editedModel as T)
-                .subscribe(this.loadModels);
+                .subscribe(_ => {
+                    this.loadModels();
+                });
             this.isNewRecord = false;
         }
         else {
             this.modelsService.updateModel(this.editedModel as T)
-                .subscribe(this.loadModels);
+            .subscribe(_ => {
+                this.loadModels();
+            });
         }
         this.editedModel = null;
     }
@@ -72,6 +77,8 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
 
     deleteModel(model: T){
         this.modelsService.deleteModel(model!.id as K)
-            .subscribe(this.loadModels);
+            .subscribe(_ => {
+                this.loadModels();
+            });
     }
 }

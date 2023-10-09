@@ -1,5 +1,5 @@
 ﻿using Notes.Interfaces.Primaries.AuthPrimaries;
-using Notes.Models.Database;
+using Notes.Models.Database.AdminModels;
 using System.Security.Claims;
 
 namespace Notes.Interfaces.Repositories.AuthRepositories;

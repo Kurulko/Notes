@@ -2,7 +2,7 @@
 using Notes.Commons;
 using Notes.Interfaces.Repositories.AuthRepositories;
 using Notes.Interfaces.Services.AuthServices;
-using Notes.Models.Database;
+using Notes.Models.Database.AdminModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

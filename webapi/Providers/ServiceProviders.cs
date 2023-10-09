@@ -2,24 +2,12 @@
 using Microsoft.IdentityModel.Tokens;
 using Notes.Commons.Settings;
 using System.Text;
-using Notes.Interfaces.Repositories.UserRepositories;
-using Notes.Repositories.UserRepositories;
-using Notes.Interfaces.Services.UserServices;
-using Notes.Services.UserServices;
-using Notes.Interfaces.Maps.UserMaps;
-using Notes.Maps.UserMaps;
 using Notes.Interfaces.Repositories.AuthRepositories;
 using Notes.Repositories.AuthRepositories;
 using Notes.Services.AuthServices;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Maps.AuthMaps;
-using Notes.Interfaces.Repositories.RoleRepositories;
-using Notes.Repositories.RoleRepositories;
-using Notes.Interfaces.Services.RoleServices;
-using Notes.Interfaces.Maps.RoleMaps;
-using Notes.Maps.RoleMaps;
-using Notes.Services.RoleServices;
 using Notes.Interfaces.Repositories.NotesRepositories;
 using Notes.Repositories.NotesRepositories;
 using Notes.Services.NotesServices;
@@ -36,6 +24,20 @@ using Notes.Interfaces.Maps;
 using Notes.ViewModels.Database;
 using Notes.Models.Database.NotesModels;
 using Notes.ViewModels.Database.NotesModels;
+using Notes.ViewModels.Database.AdminModels;
+using Notes.Models.Database.AdminModels;
+using Notes.Interfaces.Repositories.AdminRepositories.RoleRepositories;
+using Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;
+using Notes.Interfaces.Services.AdminServices.UserServices;
+using Notes.Interfaces.Services.AdminServices.RoleServices;
+using Notes.Interfaces.Maps.AdminMaps.UserMaps;
+using Notes.Interfaces.Maps.AdminMaps.RoleMaps;
+using Notes.Maps.AdminMaps.UserMaps;
+using Notes.Maps.AdminMaps.RoleMaps;
+using Notes.Repositories.AdminRepositories.RoleRepositories;
+using Notes.Repositories.AdminRepositories.UserRepositories;
+using Notes.Services.AdminServices.UserServices;
+using Notes.Services.AdminServices.RoleServices;
 
 namespace WebApi.Providers;
 
@@ -109,7 +111,7 @@ public static class ServiceProviders
         services.AddDbModelServices<ICategoryRepository, CategoryRepository,
             ICategoryService, CategoryManager, ICategoryMap, CategoryMap, Category, CategoryViewModel>();
 
-        services.AddDbModelServices<INoteItemRepository, NoteItemRepository, 
+        services.AddDbModelServices<INoteItemRepository, NoteItemRepository,
             INoteItemService, NoteItemManager, INoteItemMap, NoteItemMap, NoteItem, NoteItemViewModel>();
     }
 

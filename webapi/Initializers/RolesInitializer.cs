@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Notes.Commons;
-using Notes.Interfaces.Repositories.RoleRepositories;
-using Notes.Models.Database;
-using Notes.Repositories.RoleRepositories;
+using Notes.Interfaces.Repositories.AdminRepositories.RoleRepositories;
+using Notes.Models.Database.AdminModels;
 
 namespace WebApi.Initializers;
 

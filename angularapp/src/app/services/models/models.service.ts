@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseService } from '../base.service';
 import { Helpers } from '../../helpers/helpers';
+import { DbModel } from 'src/app/models/database/db-model';
+import { IndexViewModel } from 'src/app/models/helpers/index-view-model';
 
 export abstract class ModelsService<T extends DbModel, K extends string|number> extends BaseService {
     constructor(httpClient: HttpClient, helper: Helpers, controllerName: string) {
@@ -9,22 +11,22 @@ export abstract class ModelsService<T extends DbModel, K extends string|number> 
     }
 
     getModelById(id: K): Observable<T> {
-        return super.webClient.get<T>(id.toString())
+        return this.webClient.get<T>(id.toString())
     }
 
-    getModels(): Observable<T[]>{
-        return super.webClient.get<T[]>('')
+    getModels(): Observable<IndexViewModel<T>>{
+        return this.webClient.get<IndexViewModel<T>>('')
     }
 
     updateModel(model:T): Observable<Object> {
-        return super.webClient.put('', model)
+        return this.webClient.put('', model)
     }
 
     createModel(model:T): Observable<T>{
-        return super.webClient.post<T>('',model)
+        return this.webClient.post<T>('',model)
     }
 
     deleteModel(id: K): Observable<Object> {
-        return super.webClient.delete(id.toString());
+        return this.webClient.delete(id.toString());
     }
 }

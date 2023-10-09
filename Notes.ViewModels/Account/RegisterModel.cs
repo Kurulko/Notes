@@ -1,5 +1,5 @@
-﻿using Notes.Models.Database;
-using Notes.ViewModels.Database;
+﻿using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Database.AdminModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -20,6 +20,7 @@ public class RegisterModel : AccountModel
 
     public static explicit operator User(RegisterModel register)
         => new() { Email = register.Email, UserName = register.Name};
+
     public static explicit operator UserViewModel(RegisterModel register)
         => new() { Email = register.Email, UserName = register.Name};
 }

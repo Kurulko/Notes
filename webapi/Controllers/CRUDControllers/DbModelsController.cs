@@ -21,11 +21,11 @@ public abstract class DbModelsController<T, K> : ApiController where T : IDbView
         => await map.GetModelByIdAsync(key);
 
     [HttpPost]
-    public virtual async Task<T> AddModelAsync(T model)
+    public virtual async Task<T> AddModelAsync([FromBody] T model)
         => await map.AddModelAsync(model);
 
     [HttpPut]
-    public virtual async Task<IActionResult> UpdateModelAsync(T model)
+    public virtual async Task<IActionResult> UpdateModelAsync([FromBody] T model)
         => await ReturnOkIfEverithingIsGood(async () => await map.UpdateModelAsync(model));
 
     [HttpDelete("{key}")]

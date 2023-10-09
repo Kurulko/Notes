@@ -17,6 +17,11 @@ import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/auth/register.component';
 import { HomeComponent } from './components/home.component';
 import { AuthGuard } from './helpers/canActivateAuthGuard';
+import { UsersComponent } from './components/models/admin/users.component';
+import { RolesComponent } from './components/models/admin/roles.component';
+import { CategoriesComponent } from './components/models/user/notes/categories.component';
+import { NoteItemsComponent } from './components/models/user/notes/note-items.component';
+import { NoteModelsComponent } from './components/models/user/notes/note-models.component';
 
 @NgModule({
     imports: [
@@ -38,7 +43,12 @@ import { AuthGuard } from './helpers/canActivateAuthGuard';
       LoginComponent,
       RegisterComponent,
       LogoutComponent,
-      NotFoundComponent
+      NotFoundComponent,
+      RolesComponent,
+      UsersComponent,
+      CategoriesComponent,
+      NoteItemsComponent,
+      // NoteModelsComponent,
     ],
     bootstrap: [ AppComponent ],
     providers: [ AuthGuard ]

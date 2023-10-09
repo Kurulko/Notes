@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Notes.Models.Database;
+using Notes.Models.Database.AdminModels;
 using Notes.Models.Database.NotesModels;
 using System;
 using System.Collections.Generic;

@@ -16,7 +16,7 @@ export class AuthService extends BaseService{
     }
     
     private account(path:string, authModel: AuthModel): Observable<TokenViewModel> {
-        return super.webClient.post<TokenViewModel>(path, authModel).pipe(
+        return this.webClient.post<TokenViewModel>(path, authModel).pipe(
             catchError(super.handleError)     
         );
     }
@@ -30,7 +30,7 @@ export class AuthService extends BaseService{
     }
 
     logout(): void {
-        super.webClient.post('logout').pipe(
+        this.webClient.post('logout').pipe(
             catchError(super.handleError)
         );
     }

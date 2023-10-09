@@ -1,0 +1,45 @@
+<h1>Categories</h1>
+<hr />
+<br />
+<input type="button" value='Add' class="btn btn-outline-primary" (click)="addModel()" />
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let model of models">
+            <ng-template [ngTemplateOutlet]="loadTemplate(model)" [ngTemplateOutletContext]="{ $implicit: model}" />
+        </tr>
+    </tbody>
+</table>
+
+<ng-template #readOnlyTemplate let-model>
+    <td>{{model.id}}</td>
+    <td>{{model.name}}</td>
+    <td>
+        <input type="button" value='Change' class="btn btn-outline-warning" (click)="editModel(model)" />
+    </td>
+    <td>
+        <input type="button" value='Delete' class="btn btn-outline-danger" (click)="deleteModel(model)" />
+    </td>
+</ng-template>
+
+<ng-template #editTemplate>
+    <td>
+        <input type="number" [(ngModel)]="editedModel!.id" readonly disabled class="form-control" placeholder={{editedModel!.id}}/>
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedModel!.name" class="form-control" placeholder="Name"/>
+    </td>
+    <td>
+        <input type="button" value='Save' class="btn btn-outline-primary" (click)="saveModel()" />
+    </td>
+    <td>
+        <input type="button" value='Cancel' class="btn btn-outline-warning" (click)="cancel()" />
+    </td>
+</ng-template>

@@ -1,4 +1,4 @@
-﻿using Notes.Models.Base;
+﻿using Notes.Models.Base.AdminModels;
 using Notes.Models.Database;
 using System;
 using System.Collections.Generic;

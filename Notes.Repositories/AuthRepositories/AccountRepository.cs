@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Notes.Interfaces.Repositories.UserRepositories;
 using Notes.ViewModels.Account;
 using Notes.Commons;
-using Notes.Models.Database;
 using Notes.Interfaces.Repositories.AuthRepositories;
+using Notes.Models.Database.AdminModels;
+using Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;
 
 namespace Notes.Repositories.AuthRepositories;
 

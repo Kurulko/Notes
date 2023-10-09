@@ -13,12 +13,7 @@ export abstract class BaseService {
         this.webClient = new WebClient(httpClient, `${this._pathBase}/${controllerName}`, this.header());
     }
 
-    public extractData(res: Response){
-        const body = res.json();
-        return body || {};
-    }
-
-    public handleError(error: Response | any){
+    protected handleError(error: Response | any){
         let errMsg: string;
         if(error instanceof Response){
             const body = error.json() || '';
@@ -27,8 +22,8 @@ export abstract class BaseService {
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.log(errMsg);
-        return throwError(errMsg);
+        console.error(`ERROR: ${errMsg}`);
+        return throwError(() => errMsg);
     }
 
     private header(){
@@ -36,14 +31,5 @@ export abstract class BaseService {
         if(this.helper.isAuthenticated())
             header  = header.append('Authorization', `Bearer ${this.helper.getToken()}`);
         return {headers: header};
-    }
-
-    public setToken(data:any){
-        this.helper.setToken(data);
-    }
-
-    public failToken(error: Response | any){
-        this.helper.failToken();
-        return this.handleError(error);
     }
 }

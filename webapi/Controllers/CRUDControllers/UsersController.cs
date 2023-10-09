@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Notes.Interfaces.Maps.UserMaps;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.ViewModels;
-using Notes.ViewModels.Database;
 using Notes.Commons.Extensions;
 using Notes.ViewModels.Account;
 using Notes.Commons;
 using Notes.Models.Database.NotesModels;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.ViewModels.Database.NotesModels;
+using Notes.Interfaces.Maps.AdminMaps.UserMaps;
+using Notes.ViewModels.Database.AdminModels;
 
 namespace WebApi.Controllers.CRUDControllers;
 
@@ -34,9 +34,6 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
             return new { tokenInfo.token, tokenInfo.expirationDays };
         });
 
-    [HttpGet("user-by-default")]
-    public async Task<UserViewModel> CreateUserAsync()
-        => await userMap.CreateUserAsync();
 
     [AllowAnonymous]
     [HttpGet("userid-by-name/{userName}")]
@@ -63,9 +60,9 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
         => await CheckAccess(() => userMap.GetUsedUserAsync());
 
 
-    [HttpGet("name")]
-    public virtual async Task<UserViewModel?> GetUserByNameAsync(string name)
-        => await userMap.GetUserByNameAsync(name);
+    [HttpGet("name/{userName}")]
+    public virtual async Task<UserViewModel?> GetUserByNameAsync(string userName)
+        => await userMap.GetUserByNameAsync(userName);
 
     #endregion
 
