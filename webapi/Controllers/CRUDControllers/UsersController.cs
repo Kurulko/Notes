@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.ViewModels;
 using Notes.Commons.Extensions;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.Commons;
 using Notes.Models.Database.NotesModels;
 using Notes.Interfaces.Maps.AuthMaps;
@@ -29,9 +29,8 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
             string userId = model.Id;
             await CheckAccessForUser(userId);
             await userMap.UpdateModelAsync(model);
-            IEnumerable<string> roles = await userMap.GetRolesAsync(userId);
-            var tokenInfo = jwtMap.GenerateJwtToken(model, roles);
-            return new { tokenInfo.token, tokenInfo.expirationDays };
+            string[] roles = (await userMap.GetRolesAsync(userId)).ToArray();
+            return jwtMap.GenerateJwtToken(model, roles);
         });
 
 

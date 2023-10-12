@@ -1,4 +1,5 @@
-export class TokenModel {
-    token:string;
+import { TokenBase } from "./token-base";
+
+export class TokenModel extends TokenBase{
     expirationDate: Date;
 }

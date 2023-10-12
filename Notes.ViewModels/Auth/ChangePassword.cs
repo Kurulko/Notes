@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Notes.ViewModels.Account;
+namespace Notes.ViewModels.Auth;
 
 public class ChangePassword
 {

@@ -3,12 +3,16 @@ import { DbModel } from 'src/app/models/database/db-model';
 import { IndexViewModel } from 'src/app/models/helpers/index-view-model';
 import { ModelsService } from 'src/app/services/models/models.service';
 import { NoteItemService } from 'src/app/services/models/notes/note-item.service';
+import { EditModelComponent } from '../edit-model.component';
+import { MatSnackBar  } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
     selector: 'app-models',
     template: ""
 })
-export abstract class ModelsComponent<T extends DbModel, K extends string|number> implements OnInit {
+export abstract class ModelsComponent<T extends DbModel, K extends string|number> extends EditModelComponent implements OnInit {
     @ViewChild('readOnlyTemplate', {static: false})
     readOnlyTemplate: TemplateRef<any>|null;
 
@@ -19,7 +23,12 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     editedModel: T|null = null;
     isNewRecord: boolean = false;
 
-    constructor(protected modelsService: ModelsService<T, K>){
+    get isEditedModel(): boolean {
+        return this.editedModel != null;
+    }
+
+    constructor(protected modelsService: ModelsService<T, K>, snackBar: MatSnackBar){
+        super(snackBar);
     }
 
     ngOnInit(): void {
@@ -53,16 +62,20 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     saveModel() {
         if(this.isNewRecord) {
             this.modelsService.createModel(this.editedModel as T)
+                .pipe(catchError(super.handleError))
                 .subscribe(_ => {
                     this.loadModels();
+                    this.modelAddedSuccessfully()
                 });
             this.isNewRecord = false;
         }
         else {
             this.modelsService.updateModel(this.editedModel as T)
-            .subscribe(_ => {
-                this.loadModels();
-            });
+                .pipe(catchError(super.handleError))
+                .subscribe(_ => {
+                    this.loadModels();
+                    this.modelUpdatedSuccessfully()
+                });
         }
         this.editedModel = null;
     }
@@ -77,8 +90,10 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
 
     deleteModel(model: T){
         this.modelsService.deleteModel(model!.id as K)
+            .pipe(catchError(super.handleError))
             .subscribe(_ => {
                 this.loadModels();
+                this.modelDeletedSuccessfully()
             });
     }
 }

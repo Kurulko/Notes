@@ -2,7 +2,7 @@
 using Notes.Models.Context;
 using Microsoft.AspNetCore.Http;
 using Notes.ViewModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;
 using Notes.Models.Database.AdminModels;
 

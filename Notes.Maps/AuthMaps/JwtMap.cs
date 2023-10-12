@@ -3,6 +3,7 @@ using Notes.Commons;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Auth;
 using Notes.ViewModels.Database.AdminModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ public class JwtMap : IJwtMap
     public JwtMap(IJwtService jwtService)
         => this.jwtService = jwtService;
 
-    public (string token, int expirationDays) GenerateJwtToken(UserViewModel user, IEnumerable<string> roles)
+    public TokenModel GenerateJwtToken(UserViewModel user, params string[] roles)
         => jwtService.GenerateJwtToken((User)user, roles);
 
     public ClaimsPrincipal GetPrincipalFromToken(string token)

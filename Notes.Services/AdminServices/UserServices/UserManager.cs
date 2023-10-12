@@ -6,7 +6,7 @@ using Notes.Interfaces.Services.AdminServices.UserServices;
 using Notes.Models.Database.AdminModels;
 using Notes.Models.Database.NotesModels;
 using Notes.ViewModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 
 namespace Notes.Services.AdminServices.UserServices;
 

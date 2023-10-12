@@ -1,4 +1,4 @@
-﻿using Notes.ViewModels.Account;
+﻿using Notes.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,8 @@ namespace Notes.Interfaces.Primaries.AuthPrimaries;
 
 public interface IAccountPrimary
 {
-    Task<IEnumerable<string>> LoginUserAsync(LoginModel model);
-    Task<IEnumerable<string>> RegisterUserAsync(RegisterModel model);
+    Task<TokenModel> LoginUserAsync(LoginModel model);
+    Task<TokenModel> RegisterUserAsync(RegisterModel model);
+    Task<TokenModel> GetTokenAsync();
     Task LogoutUserAsync();
 }

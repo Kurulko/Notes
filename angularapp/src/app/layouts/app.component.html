@@ -5,13 +5,16 @@
         <i class="fas fa-bars"></i> Menu
       </button>
       <a class="navbar-brand" href="">{{title}}</a>
-      <button mat-button [routerLink]="['./logout']" class="btn btn-dark text-white text-right" >Logout</button>
+      <div>
+        <button mat-button [routerLink]="['./account']" class="btn btn-dark text-white text-right">Account</button>
+        <button mat-button [routerLink]="['./logout']" class="btn btn-dark text-white text-right">Logout</button>
+      </div>
     </div>
   </header>
   <div class="row">
     <div class="col-md-2">
       <mat-drawer #drawer mode="side" class="left-panel">
-        <app-left-panel-layout [isAuthenticated]="authentication" />
+        <app-left-panel-layout [isAuthenticated]="isAuthenticated" [isAdmin]="isAdmin"/>
       </mat-drawer>
     </div>
     <div class="col-md-10">

@@ -1,6 +1,6 @@
 ﻿using Notes.Models.Base.AdminModels;
 using Notes.Models.Database.AdminModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;

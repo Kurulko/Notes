@@ -12,20 +12,22 @@ import { RolesComponent } from './components/models/admin/roles.component';
 import { UsersComponent } from './components/models/admin/users.component';
 import { CategoriesComponent } from './components/models/user/notes/categories.component';
 import { NoteItemsComponent } from './components/models/user/notes/note-items.component';
+import { AdminGuard } from './helpers/canActiveteAdminGuard';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'logout', component: LogoutComponent },
+    
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-
-    { path: 'user-password', component: UserPasswordComponent, canActivate: [AuthGuard] },
-    { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
-    { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },//admin
-    { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },//admin
+    { path: 'password', component: UserPasswordComponent, canActivate: [AuthGuard] },
+    { path: 'account', component: UserComponent, canActivate: [AuthGuard] },
     { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
     { path: 'notes', component: NoteItemsComponent, canActivate: [AuthGuard] },
+
+    { path: 'roles', component: RolesComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: 'users', component: UsersComponent, canActivate: [AuthGuard, AdminGuard] },
 
     { path: '**', component: NotFoundComponent },
 ];

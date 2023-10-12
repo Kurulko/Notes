@@ -7,6 +7,7 @@ import { Role } from 'src/app/models/database/admin/role';
 import { RoleService } from 'src/app/services/models/admin/role.service';
 import { User } from 'src/app/models/database/admin/user';
 import { UserService } from 'src/app/services/models/admin/user.service';
+import { MatSnackBar  } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'users-app',
@@ -14,8 +15,8 @@ import { UserService } from 'src/app/services/models/admin/user.service';
     providers: [ UserService ]
 })
 export class UsersComponent extends AdminModelsComponent<User> {
-    constructor(userService: UserService){
-        super(userService);
+    constructor(userService: UserService, snackBar: MatSnackBar){
+        super(userService, snackBar);
     }
 
     override createEmptyModel(): User {

@@ -5,7 +5,7 @@ using Notes.Interfaces.Services.AdminServices.UserServices;
 using Notes.Models.Database.AdminModels;
 using Notes.Models.Database.NotesModels;
 using Notes.ViewModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.ViewModels.Database.AdminModels;
 using Notes.ViewModels.Database.NotesModels;
 using System.Security.Claims;

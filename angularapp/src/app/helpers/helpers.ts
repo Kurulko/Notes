@@ -3,15 +3,30 @@ import { Subject } from 'rxjs';
 import { TokenModel } from '../models/auth/token-model';
 import { TokenViewModel } from '../models/auth/token-viewmodel';
 import { Observable } from "rxjs";
+import { toTokenModel } from './toTokenModel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Helpers {
     private authenticationChanged = new Subject<boolean>();
+    private adminChanged = new Subject<boolean>();
     private readonly tokenStorageName: string = 'token';
 
-    public isAuthenticated() : boolean {
+    public isAuthenticated() : boolean {        
+        return this.getActiveToken() ? true : false; 
+    }
+
+    public isAdmin() : boolean {
+        if (this.isAuthenticated()) {
+            const tokenModel:TokenModel = this.getActiveToken()!;
+            return tokenModel.roles.indexOf('Admin') !== -1;
+        }
+
+        return false; 
+    }
+
+    private getActiveToken(): TokenModel|undefined{
         const localStorageToken = localStorage[this.tokenStorageName];
         const isExistedToken =  localStorageToken !== undefined && localStorageToken !== null && localStorageToken !== "undefined" && localStorageToken !== "null" && localStorageToken !== ''; 
 
@@ -23,19 +38,23 @@ export class Helpers {
 
             if(!isActive){
                 this.clearToken();
-                return false;
+                return undefined;
             }
 
-            return true;
+            return tokenModel;
         }
         
-        return false; 
+        return undefined;
     }
-
+    
     public isAuthenticationChanged(): Observable<boolean> {
         return this.authenticationChanged.asObservable();
     }
 
+    public isAdminChanged(): Observable<boolean> {
+        return this.adminChanged.asObservable();
+    }
+    
     public getToken(): string|undefined {
         if(this.isAuthenticated())
             return undefined;
@@ -47,15 +66,8 @@ export class Helpers {
         return JSON.parse(localStorage[this.tokenStorageName]) as TokenModel|undefined;
     }
 
-    public setToken(data: TokenViewModel): void {
-        const today = new Date();
-
-        const tokenModel:TokenModel = new TokenModel();
-        tokenModel.token = data.token;
-
-        today.setDate(today.getDate() + data.expirationDays);
-        tokenModel.expirationDate = today;
-
+    public setToken(tokenViewModel: TokenViewModel): void {
+        const tokenModel:TokenModel = toTokenModel(tokenViewModel);
         this.setStorageToken(JSON.stringify(tokenModel));
     }
 
@@ -71,8 +83,9 @@ export class Helpers {
         this.setStorageToken(undefined);
     }
 
-    private setStorageToken(value: string|undefined): void{
+    private setStorageToken(value: string|undefined): void {
         localStorage[this.tokenStorageName] = value;
         this.authenticationChanged.next(this.isAuthenticated());
+        this.adminChanged.next(this.isAdmin());
     }
 }

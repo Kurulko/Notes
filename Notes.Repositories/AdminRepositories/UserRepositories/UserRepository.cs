@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Notes.ViewModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.Commons;
 using Notes.Models.Database.NotesModels;
 using Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;

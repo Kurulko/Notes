@@ -1,11 +1,12 @@
 ﻿using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Auth;
 using Notes.ViewModels.Database.AdminModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Notes.ViewModels.Account;
+namespace Notes.ViewModels.Auth;
 
-public class RegisterModel : AccountModel
+public class RegisterModel : AuthModel
 {
     [DataType(DataType.EmailAddress)]
     public string? Email { get; set; }

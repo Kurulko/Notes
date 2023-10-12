@@ -1,6 +1,6 @@
 ﻿using Notes.Models.Base.AdminModels;
 using Notes.ViewModels;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 
 namespace Notes.Interfaces.Primaries.AdminPrimaries.UserPrimaries;
 

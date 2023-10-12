@@ -6,6 +6,10 @@
             <a routerLink="/categories" class="btn btn-dark ml-auto text-white">Categories</a><br>
             <a routerLink="/notes" class="btn btn-dark ml-auto text-white">Notes</a><br>
         </div>
+        <div *ngIf="isAdmin" class="btn-group-vertical">
+            <a routerLink="/users" class="btn btn-dark ml-auto text-white">Users</a><br>
+            <a routerLink="/roles" class="btn btn-dark ml-auto text-white">Roles</a><br>
+        </div>
         <div *ngIf="!isAuthenticated" class="btn-group-vertical">
             <a routerLink="/login" class="btn btn-dark ml-auto text-white">Login</a><br>
             <a routerLink="/register" class="btn btn-dark ml-auto text-white">Register</a><br>

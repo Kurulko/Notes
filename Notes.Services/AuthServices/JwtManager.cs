@@ -3,6 +3,7 @@ using Notes.Commons;
 using Notes.Interfaces.Repositories.AuthRepositories;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,7 +16,7 @@ public class JwtManager : IJwtService
     public JwtManager(IJwtRepository jwtRepository)
         => this.jwtRepository = jwtRepository;
 
-    public (string token, int expirationDays) GenerateJwtToken(User user, IEnumerable<string> roles)
+    public TokenModel GenerateJwtToken(User user, params string[] roles)
         => jwtRepository.GenerateJwtToken(user, roles);
 
     public ClaimsPrincipal GetPrincipalFromToken(string token)

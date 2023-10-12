@@ -29,6 +29,12 @@ export class AuthService extends BaseService{
         return this.account('register', registerModel);
     }
 
+    token(): Observable<TokenViewModel> {
+        return this.webClient.get<TokenViewModel>('token').pipe(
+            catchError(super.handleError)     
+        );
+    }
+
     logout(): void {
         this.webClient.post('logout').pipe(
             catchError(super.handleError)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.Interfaces.Services.AuthServices;
 using Notes.Interfaces.Repositories.AuthRepositories;
 
@@ -11,12 +11,15 @@ public class AccountManager : IAccountService
     public AccountManager(IAccountRepository accountRepository)
         => (this.accountRepository) = (accountRepository);
 
-    public async Task<IEnumerable<string>> LoginUserAsync(LoginModel model)
+    public async Task<TokenModel> GetTokenAsync()
+        => await accountRepository.GetTokenAsync();
+
+    public async Task<TokenModel> LoginUserAsync(LoginModel model)
         => await accountRepository.LoginUserAsync(model);
 
     public async Task LogoutUserAsync()
         => await accountRepository.LogoutUserAsync();
 
-    public async Task<IEnumerable<string>> RegisterUserAsync(RegisterModel model)
+    public async Task<TokenModel> RegisterUserAsync(RegisterModel model)
         => await accountRepository.RegisterUserAsync(model);
 }

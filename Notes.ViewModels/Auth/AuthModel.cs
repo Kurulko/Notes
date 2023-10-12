@@ -3,9 +3,9 @@ using Notes.ViewModels.Database.AdminModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Notes.ViewModels.Account;
+namespace Notes.ViewModels.Auth;
 
-public class AccountModel
+public class AuthModel
 {
     [Required(ErrorMessage = "Enter your name!")]
     public string Name { get; set; } = null!;
@@ -19,9 +19,9 @@ public class AccountModel
     [JsonPropertyName("rememberme")]
     public bool RememberMe { get; set; }
 
-    public static explicit operator User(AccountModel accountModel)
+    public static explicit operator User(AuthModel accountModel)
         => new() { UserName = accountModel.Name };
 
-    public static explicit operator UserViewModel(AccountModel accountModel)
+    public static explicit operator UserViewModel(AuthModel accountModel)
         => new() { UserName = accountModel.Name };
 }

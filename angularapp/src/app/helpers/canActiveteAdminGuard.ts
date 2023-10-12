@@ -6,13 +6,13 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BaseGuard } from './canActivateGuard';
 
 @Injectable()
-export class AuthGuard extends BaseGuard {
+export class AdminGuard extends BaseGuard{
     constructor(router: Router, helper: Helpers){
         super(router, helper);
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-        if(!this.helper.isAuthenticated()){
+        if(!this.helper.isAdmin()){
             this.router.navigate(['/login']);
             return false;
         }

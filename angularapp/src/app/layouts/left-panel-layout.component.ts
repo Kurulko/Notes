@@ -8,4 +8,7 @@ import { Input, Component } from "@angular/core";
 export class LeftPanelLayoutComponent {
     @Input() 
     isAuthenticated:boolean = false;
+
+    @Input() 
+    isAdmin:boolean = false;
 }

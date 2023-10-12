@@ -22,6 +22,11 @@ import { RolesComponent } from './components/models/admin/roles.component';
 import { CategoriesComponent } from './components/models/user/notes/categories.component';
 import { NoteItemsComponent } from './components/models/user/notes/note-items.component';
 import { NoteModelsComponent } from './components/models/user/notes/note-models.component';
+import { UserComponent } from './components/account/user.component';
+import { UserPasswordComponent } from './components/account/user-password.component';
+import { BaseComponent } from './components/base.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AdminGuard } from './helpers/canActiveteAdminGuard';
 
 @NgModule({
     imports: [
@@ -34,6 +39,7 @@ import { NoteModelsComponent } from './components/models/user/notes/note-models.
       MatSidenavModule,
       AppRoutingModule,
       HttpClientModule,
+      MatSnackBarModule,
       FormsModule
     ],
    declarations: [
@@ -48,9 +54,11 @@ import { NoteModelsComponent } from './components/models/user/notes/note-models.
       UsersComponent,
       CategoriesComponent,
       NoteItemsComponent,
-      // NoteModelsComponent,
+      UserComponent,
+      UserPasswordComponent,
+      BaseComponent
     ],
     bootstrap: [ AppComponent ],
-    providers: [ AuthGuard ]
+    providers: [ AuthGuard, AdminGuard ]
 })
 export class AppModule { }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Models.Database;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.ViewModels.Database.AdminModels;
 
 namespace WebApi.Controllers.AuthControllers;
@@ -12,32 +13,26 @@ namespace WebApi.Controllers.AuthControllers;
 public class AccountController : ApiController
 {
     readonly IAccountMap accMap;
-    readonly IJwtMap jwtMap;
-    public AccountController(IAccountMap accMap, IJwtMap jwtMap, ILogger<AccountController> logger) : base(logger)
-        => (this.accMap, this.jwtMap) = (accMap, jwtMap);
+    public AccountController(IAccountMap accMap, ILogger<AccountController> logger) : base(logger)
+        => (this.accMap) = (accMap);
 
 
     [AllowAnonymous]
     [HttpPost(nameof(Register))]
     public async Task<IActionResult> Register([FromBody] RegisterModel register)
-        => await ReturnOkTokenIfEverithingIsGood(async () => await accMap.RegisterUserAsync(register), register);
-
+        => await ReturnOkIfEverithingIsGood(async () => await accMap.RegisterUserAsync(register));
 
     [HttpPost(nameof(Login))]
     public async Task<IActionResult> Login([FromBody] LoginModel login)
-        => await ReturnOkTokenIfEverithingIsGood(async () => await accMap.LoginUserAsync(login), login);
+        => await ReturnOkIfEverithingIsGood(async () => await accMap.LoginUserAsync(login));
 
+    [Authorize]
+    [HttpGet("Token")]
+    public async Task<IActionResult> GetTokenAsync()
+        => await ReturnOkIfEverithingIsGood(accMap.GetTokenAsync);
 
     [Authorize]
     [HttpPost(nameof(Logout))]
     public async Task<IActionResult> Logout()
         => await ReturnOkIfEverithingIsGood(accMap.LogoutUserAsync);
-
-    async Task<IActionResult> ReturnOkTokenIfEverithingIsGood(Func<Task<IEnumerable<string>>> action, AccountModel accountModel)
-        => await ReturnOkIfEverithingIsGood(async () =>
-        {
-            IEnumerable<string> roles = await action();
-            var tokenInfo = jwtMap.GenerateJwtToken((UserViewModel)accountModel, roles);
-            return new { tokenInfo.token, tokenInfo.expirationDays };
-        });
 }

@@ -2,6 +2,7 @@
 using Notes.Commons.Settings;
 using Notes.Interfaces.Repositories.AuthRepositories;
 using Notes.Models.Database.AdminModels;
+using Notes.ViewModels.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,7 +15,7 @@ public class JwtRepository : IJwtRepository
     public JwtRepository(JwtSettings jwtSettings)
         => this.jwtSettings = jwtSettings;
 
-    public (string token, int expirationDays) GenerateJwtToken(User user, IEnumerable<string> roles)
+    public TokenModel GenerateJwtToken(User user, params string[] roles)
     {
         JwtSecurityTokenHandler tokenHandler = new();
         var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
@@ -33,7 +34,7 @@ public class JwtRepository : IJwtRepository
         };
 
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-        return (tokenHandler.WriteToken(token), jwtSettings.ExpirationDays);
+        return new TokenModel() { Token = tokenHandler.WriteToken(token) , ExpirationDays = jwtSettings.ExpirationDays , Roles = roles };
     }
 
     public ClaimsPrincipal GetPrincipalFromToken(string token)

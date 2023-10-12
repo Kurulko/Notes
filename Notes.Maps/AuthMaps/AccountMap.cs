@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Notes.ViewModels.Account;
+using Notes.ViewModels.Auth;
 using Notes.Interfaces.Maps.AuthMaps;
 using Notes.Interfaces.Services.AuthServices;
 
@@ -11,12 +11,15 @@ public class AccountMap : IAccountMap
     public AccountMap(IAccountService accountService)
         => (this.accountService) = (accountService);
 
-    public async Task<IEnumerable<string>> LoginUserAsync(LoginModel model)
+    public async Task<TokenModel> GetTokenAsync()
+        => await accountService.GetTokenAsync();
+
+    public async Task<TokenModel> LoginUserAsync(LoginModel model)
         => await accountService.LoginUserAsync(model);
 
     public async Task LogoutUserAsync()
         => await accountService.LogoutUserAsync();
 
-    public async Task<IEnumerable<string>> RegisterUserAsync(RegisterModel model)
+    public async Task<TokenModel> RegisterUserAsync(RegisterModel model)
         => await accountService.RegisterUserAsync(model);
 }
