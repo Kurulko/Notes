@@ -6,6 +6,7 @@ import { RegisterModel } from 'src/app/models/auth/register-model';
 import { TokenViewModel } from 'src/app/models/auth/token-viewmodel';
 import { AuthComponent } from './auth.component';
 import { Observable } from "rxjs";
+import { MatSnackBar  } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-register',
@@ -14,8 +15,9 @@ import { Observable } from "rxjs";
 })
 export class RegisterComponent extends AuthComponent {
     registerModel: RegisterModel = new RegisterModel();
-    constructor(helpers: Helpers, router: Router, authService: AuthService){
-        super(helpers, router, authService);
+    
+    constructor(helpers: Helpers, router: Router,  authService: AuthService, snackBar: MatSnackBar){
+        super(helpers, router, authService, snackBar);
     }
 
     getTokenViewModel() : Observable<TokenViewModel> {

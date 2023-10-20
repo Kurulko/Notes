@@ -6,12 +6,9 @@ import { NoteModelService } from 'src/app/services/models/notes/note-model.servi
 import { AdminModelService } from 'src/app/services/models/admin/admin-model.service';
 import { AdminModel } from 'src/app/models/database/admin/admin-model';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { EditModelsComponent } from '../edit-models.component';
 
-@Component({
-    selector: 'admin-models-app',
-    templateUrl: './admin-models.component.html',
-})
-export abstract class AdminModelsComponent<T extends AdminModel> extends ModelsComponent<T, string> {
+export abstract class AdminModelsComponent<T extends AdminModel> extends EditModelsComponent<T, string> {
     constructor(adminModelService: AdminModelService<T>, snackBar: MatSnackBar){
         super(adminModelService, snackBar);
     }

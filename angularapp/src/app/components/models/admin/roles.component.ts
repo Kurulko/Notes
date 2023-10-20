@@ -6,6 +6,7 @@ import { AdminModelsComponent } from './admin-models.component';
 import { Role } from 'src/app/models/database/admin/role';
 import { RoleService } from 'src/app/services/models/admin/role.service';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { NgModel } from '@angular/forms';
 
 @Component({
     selector: 'roles-app',
@@ -17,7 +18,10 @@ export class RolesComponent extends AdminModelsComponent<Role> {
         super(roleService, snackBar);
     }
 
-    override createEmptyModel(): Role {
-        return new Role();
+    @ViewChild('name') 
+    nameModel: NgModel;
+
+    protected override isValidModel(): boolean {
+        return !(this.nameModel?.invalid ?? true);
     }
 }

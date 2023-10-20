@@ -20,7 +20,7 @@ export class UserPasswordComponent extends EditModelComponent {
 
     changePassword() {
         this.userService.changePassword(this.password)
-            .pipe(catchError(super.handleError))
+            .pipe(this.catchError())
             .subscribe(_ => this.modelUpdatedSuccessfully());
     }
 }

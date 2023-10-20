@@ -1,9 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenViewModel } from '../models/auth/token-viewmodel';
 
 export class WebClient {
     constructor(private httpClient: HttpClient, private pathBase: string, private headers: {headers: HttpHeaders}) {}
 
+    get(url: string): Observable<Object>;
+    get<T>(url: string): Observable<T>;
+    
     get<T>(url:string): Observable<T> {
         return this.httpClient.get<T>(`${this.pathBase}/${url}`, this.headers);
     }

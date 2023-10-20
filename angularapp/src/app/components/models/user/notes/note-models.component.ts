@@ -5,15 +5,9 @@ import { ModelsComponent } from '../../models.component';
 import { NoteModelService } from 'src/app/services/models/notes/note-model.service';
 import { NoteModel } from 'src/app/models/database/notes/note-model';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { EditModelsComponent } from '../../edit-models.component';
 
-@Component({
-    selector: 'note-models-app',
-    templateUrl: './note-models.component.html',
-})
-export abstract class NoteModelsComponent<T extends NoteModel> extends ModelsComponent<T, number> {
-    @Input() 
-    rowCellTemplate: any;
-    
+export abstract class NoteModelsComponent<T extends NoteModel> extends EditModelsComponent<T, number> {  
     constructor(noteModelsService: NoteModelService<T>, snackBar: MatSnackBar){
         super(noteModelsService, snackBar);
     }

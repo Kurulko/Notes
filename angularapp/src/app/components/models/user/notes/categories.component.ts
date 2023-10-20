@@ -1,9 +1,11 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input} from '@angular/core';
 import { NoteItemService } from 'src/app/services/models/notes/note-item.service';
 import { NoteModelsComponent } from './note-models.component';
 import { Category } from 'src/app/models/database/notes/category';
 import { CategoryService } from 'src/app/services/models/notes/category.service';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { NgModel } from '@angular/forms';
 
 @Component({
     selector: 'categories-app',
@@ -15,7 +17,21 @@ export class CategoriesComponent extends NoteModelsComponent<Category> {
         super(categoryService, snackBar);
     }
 
-    override createEmptyModel(): Category {
-        return new Category();
+    @ViewChild('name') 
+    nameModel: NgModel;
+
+    protected override isValidModel(): boolean {
+//         console.log(`
+// this.nameModel?.invalid: ${this.nameModel?.invalid} 
+// this.nameModel?.invalid ?? true: ${this.nameModel?.invalid  ?? true}
+// this.editedModel: ${this.editedModel}
+// !this.isEditedModel: ${!this.isEditedModel}
+// (this.nameModel?.invalid ?? true) || !this.isEditedModel: ${(this.nameModel?.invalid ?? true) || !this.isEditedModel}
+// !(this.nameModel?.invalid ?? true) || !this.isEditedModel: ${!(this.nameModel?.invalid ?? true) || !this.isEditedModel}
+
+//         `)
+
+        return !(this.nameModel?.invalid ?? true);
     }
+    
 }

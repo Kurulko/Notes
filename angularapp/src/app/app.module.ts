@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,6 +27,9 @@ import { UserPasswordComponent } from './components/account/user-password.compon
 import { BaseComponent } from './components/base.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminGuard } from './helpers/canActiveteAdminGuard';
+import { EditModelComponent } from './components/edit-model.component';
+import { ShowErrorsComponent } from './components/show-errors.component';
+import { ModelsComponent } from './components/models/models.component';
 
 @NgModule({
     imports: [
@@ -56,9 +59,13 @@ import { AdminGuard } from './helpers/canActiveteAdminGuard';
       NoteItemsComponent,
       UserComponent,
       UserPasswordComponent,
-      BaseComponent
+      BaseComponent,
+      EditModelComponent,
+      ShowErrorsComponent, 
+      ModelsComponent
     ],
     bootstrap: [ AppComponent ],
-    providers: [ AuthGuard, AdminGuard ]
+    providers: [ AuthGuard, AdminGuard ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

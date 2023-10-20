@@ -1,25 +1,86 @@
-<base-app title="Register">
+<edit-model-app title="Register" [errors]="errors">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="registerModel.name" class="form-control" placeholder='Enter your name!' required minlength="2" #name="ngModel"/>
+        <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+            User Name must be at least 2 characters long
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="registerModel.email" class="form-control" placeholder='Enter your email!' email #email="ngModel"/>
+        <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+            Invalid email format
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="registerModel.password" class="form-control" placeholder='Enter your password!' required minlength="8" #password="ngModel"/>
+        <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+            Password must be at least 8 characters long
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" [(ngModel)]="registerModel.passwordConfirm" class="form-control" placeholder='Confirm your password!' required minlength="8" #passwordConfirm="ngModel"/>
+        <div [hidden]="passwordConfirm.valid || passwordConfirm.untouched" class="alert alert-danger">
+            Password must be at least 8 characters long
+        </div>
+    </div>
+    <br />
+    <div class="form-check">
+        <label class="form-check-label">Remember me?</label>
+        <input type="checkbox" class="form-check-input" placeholder="Remember me" [(ngModel)]="registerModel.rememberMe"/>
+    </div>
+    <br />
+    <button class="btn btn-outline-primary" (click)="account()" [disabled]="name.invalid || email.invalid || password.invalid || passwordConfirm.invalid">Send</button>
+</edit-model-app>
+
+<!-- <base-app title="Register">
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <h4>
+                <ul class="alert alert-danger text-danger" [hidden]="errors === null">
+                    <li *ngFor="let error of errors">
+                        {{error}}
+                    </li>
+                </ul>
+            </h4>
+        </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" placeholder="Enter your name!" class="form-control" [(ngModel)]="registerModel.name"/>
+                <input type="text" [(ngModel)]="registerModel.name" class="form-control" placeholder='Enter your name!' required minlength="2" #name="ngModel"/>
+                <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+                    User Name must be at least 2 characters long
+                </div>
             </div>
             <br />
             <div class="form-group">
                 <label>Email</label>
-                <input type="text" placeholder="Enter your email!" class="form-control" [(ngModel)]="registerModel.email"/>
+                <input type="email" [(ngModel)]="registerModel.email" class="form-control" placeholder='Enter your email!' email #email="ngModel"/>
+                <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+                    Invalid email format
+                </div>
             </div>
             <br />
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" placeholder="Enter your password!" [(ngModel)]="registerModel.password"/>
+                <input type="password" [(ngModel)]="registerModel.password" class="form-control" placeholder='Enter your password!' required minlength="8" #password="ngModel"/>
+                <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+                    Password must be at least 8 characters long
+                </div>
             </div>
             <br />
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" class="form-control" placeholder="Confirm your password!" [(ngModel)]="registerModel.passwordConfirm"/>
+                <input type="password" [(ngModel)]="registerModel.passwordConfirm" class="form-control" placeholder='Confirm your password!' required minlength="8" #passwordConfirm="ngModel"/>
+                <div [hidden]="passwordConfirm.valid || passwordConfirm.untouched" class="alert alert-danger">
+                    Password must be at least 8 characters long
+                </div>
             </div>
             <br />
             <div class="form-check">
@@ -27,7 +88,7 @@
                 <input type="checkbox" class="form-check-input" placeholder="Remember me" [(ngModel)]="registerModel.rememberMe"/>
             </div>
             <br />
-            <button class="btn btn-outline-primary" (click)="account()">Send</button>
+            <button class="btn btn-outline-primary" (click)="account()" [disabled]="name.invalid || email.invalid || password.invalid || passwordConfirm.invalid">Send</button>
         </div>
     </div>
-</base-app>
+</base-app> -->

@@ -13,7 +13,7 @@ export class RoleService extends AdminModelService<Role> {
     }
 
     getRoleByName(name:string) : Observable<Role>{
-        return this.webClient.get<Role>(`by-name/${name}`)
+        return this.returnModel(this.webClient.get<Role>(`by-name/${name}`));
     }
 }
     

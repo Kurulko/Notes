@@ -1,0 +1,8 @@
+<h4 [hidden]="errors === null">
+    <ul class="alert alert-danger text-danger col-md-9">
+        <li *ngFor="let error of errors">
+            {{error}}
+        </li>
+    </ul>
+</h4>
+

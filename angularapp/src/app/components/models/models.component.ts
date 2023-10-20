@@ -1,23 +1,45 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input, ContentChild } from '@angular/core';
 import { DbModel } from 'src/app/models/database/db-model';
 import { IndexViewModel } from 'src/app/models/helpers/index-view-model';
-import { ModelsService } from 'src/app/services/models/models.service';
-import { NoteItemService } from 'src/app/services/models/notes/note-item.service';
 import { EditModelComponent } from '../edit-model.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { UnaryFunction } from 'rxjs';
+import { Observable } from 'rxjs'
 
 @Component({
-    selector: 'app-models',
-    template: ""
+    selector: 'models-app',
+    templateUrl: "./models.component.html",
 })
-export abstract class ModelsComponent<T extends DbModel, K extends string|number> extends EditModelComponent implements OnInit {
+export class ModelsComponent<T extends DbModel, K extends string|number> extends EditModelComponent implements OnInit {
+    @Input() 
+    getModels: () => Observable<IndexViewModel<T>>;
+
+    @Input() 
+    createModel: UnaryFunction<T, Observable<Object>>;
+
+    @Input() 
+    updateModel: UnaryFunction<T, Observable<Object>>;
+
+    @Input() 
+    removeModel: UnaryFunction<K, Observable<Object>>;
+
+    @Input() 
+    isSaveModel: () => boolean;
+
     @ViewChild('readOnlyTemplate', {static: false})
     readOnlyTemplate: TemplateRef<any>|null;
 
     @ViewChild('editTemplate', {static: false})
     editTemplate: TemplateRef<any>|null;
+
+    @ContentChild('readOnlyTemplate') 
+    readOnlyTemplateChild: TemplateRef<any>;
+
+    @ContentChild('editTemplate')
+    editTemplateChild: TemplateRef<any>;
+
+    @ContentChild('tableHeader')
+    tableHeaderChild: TemplateRef<any>;
 
     models: T[];
     editedModel: T|null = null;
@@ -26,8 +48,8 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     get isEditedModel(): boolean {
         return this.editedModel != null;
     }
-
-    constructor(protected modelsService: ModelsService<T, K>, snackBar: MatSnackBar){
+      
+    constructor(snackBar: MatSnackBar){
         super(snackBar);
     }
 
@@ -36,12 +58,17 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     }
 
     private loadModels(){
-        this.modelsService.getModels().subscribe((indexViewModel: IndexViewModel<T>) => {
-            this.models = indexViewModel.models;
-        })
+        this.getModels()
+            .pipe(this.catchError())
+            .subscribe((indexViewModel: IndexViewModel<T>) => {
+                this.models = indexViewModel.models;
+            })
     }
 
-    abstract createEmptyModel(): T;
+    private createEmptyModel(): T{
+        const emptyModel = {} as T;
+        return emptyModel;
+    }
 
     addModel(){
         this.editedModel = this.createEmptyModel();
@@ -60,22 +87,16 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     }
 
     saveModel() {
-        if(this.isNewRecord) {
-            this.modelsService.createModel(this.editedModel as T)
-                .pipe(catchError(super.handleError))
-                .subscribe(_ => {
-                    this.loadModels();
-                    this.modelAddedSuccessfully()
-                });
-            this.isNewRecord = false;
-        }
-        else {
-            this.modelsService.updateModel(this.editedModel as T)
-                .pipe(catchError(super.handleError))
+        (this.isNewRecord ? 
+            this.createModel(this.editedModel as T) : 
+            this.updateModel(this.editedModel as T))
+                .pipe(this.catchError())
                 .subscribe(_ => {
                     this.loadModels();
                     this.modelUpdatedSuccessfully()
                 });
+        if(this.isNewRecord) {
+            this.isNewRecord = false;
         }
         this.editedModel = null;
     }
@@ -89,8 +110,8 @@ export abstract class ModelsComponent<T extends DbModel, K extends string|number
     }
 
     deleteModel(model: T){
-        this.modelsService.deleteModel(model!.id as K)
-            .pipe(catchError(super.handleError))
+        this.removeModel(model!.id as K)
+            .pipe(this.catchError())
             .subscribe(_ => {
                 this.loadModels();
                 this.modelDeletedSuccessfully()

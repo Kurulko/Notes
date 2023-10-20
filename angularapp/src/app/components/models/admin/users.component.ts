@@ -8,6 +8,7 @@ import { RoleService } from 'src/app/services/models/admin/role.service';
 import { User } from 'src/app/models/database/admin/user';
 import { UserService } from 'src/app/services/models/admin/user.service';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { NgModel } from '@angular/forms';
 
 @Component({
     selector: 'users-app',
@@ -19,7 +20,13 @@ export class UsersComponent extends AdminModelsComponent<User> {
         super(userService, snackBar);
     }
 
-    override createEmptyModel(): User {
-        return new User();
+    @ViewChild('userName') 
+    userNameModel: NgModel;
+
+    @ViewChild('email') 
+    emailModel: NgModel;
+
+    protected override isValidModel(): boolean {
+        return !(this.userNameModel?.invalid || this.emailModel?.invalid);
     }
 }

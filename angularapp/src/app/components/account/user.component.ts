@@ -19,14 +19,16 @@ export class UserComponent extends EditModelComponent implements OnInit{
     }
 
     ngOnInit(): void {
-        this.userService.getCurretUser().subscribe((user: User) => {
-            this.user = user;
-        });
+        this.userService.getCurretUser()
+            .pipe(this.catchError())
+            .subscribe((user: User) => {
+                this.user = user;
+            });
     }
 
     updateUser() {
         this.userService.updateModel(this.user)
-            .pipe(catchError(super.handleError))
+            .pipe(this.catchError())
             .subscribe(_ => this.modelUpdatedSuccessfully('User'));
     }
 }

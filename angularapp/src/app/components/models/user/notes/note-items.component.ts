@@ -3,6 +3,7 @@ import { NoteItem } from 'src/app/models/database/notes/note-item';
 import { NoteItemService } from 'src/app/services/models/notes/note-item.service';
 import { NoteModelsComponent } from './note-models.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
+import { NgModel } from '@angular/forms';
 
 @Component({
     selector: 'note-items-app',
@@ -14,7 +15,13 @@ export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
         super(noteItemService, snackBar);
     }
 
-    override createEmptyModel(): NoteItem {
-        return new NoteItem();
+    @ViewChild('title') 
+    titleModel: NgModel;
+
+    @ViewChild('description') 
+    descriptionModel: NgModel;
+
+    protected override isValidModel(): boolean {
+        return !(this.titleModel?.invalid || this.descriptionModel?.invalid);
     }
 }

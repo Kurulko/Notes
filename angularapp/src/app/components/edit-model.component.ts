@@ -1,14 +1,33 @@
 import { MatSnackBar, MatSnackBarConfig  } from '@angular/material/snack-bar';
-import { of } from 'rxjs';
+import { OperatorFunction, of } from 'rxjs';
+import { BaseComponent } from './base.component';
+import { Component, Input } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-export abstract class EditModelComponent{
+@Component({
+    selector: 'edit-model-app',
+    templateUrl: './edit-model.component.html',
+})
+export class EditModelComponent extends BaseComponent{
+    @Input() 
+    errors: string[] | null = null;
+
     constructor(private snackBar: MatSnackBar){
+        super();
     }
 
-    protected handleError(error:string){
-        console.error('Error:', error);
-        this.errorOccured(error)
-        return of(error);
+    protected catchError<T>() : OperatorFunction<T, T>{
+        return catchError((error: any) => {
+            this.handleError(error);
+            return [];
+        })
+    }
+
+    protected handleError(errors: string[]) {
+        this.errors = errors;
+        this.errorOccured(errors.join(';\n'))
+        return of(errors);
     }
 
     protected errorOccured(error:string){

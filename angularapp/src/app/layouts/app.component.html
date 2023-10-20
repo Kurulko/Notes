@@ -4,10 +4,10 @@
       <button type="button" mat-button class="btn btn-light" (click)="drawer.toggle()">
         <i class="fas fa-bars"></i> Menu
       </button>
-      <a class="navbar-brand" href="">{{title}}</a>
+      <a class="navbar-brand" routerLink="">{{title}}</a>
       <div>
-        <button mat-button [routerLink]="['./account']" class="btn btn-dark text-white text-right">Account</button>
-        <button mat-button [routerLink]="['./logout']" class="btn btn-dark text-white text-right">Logout</button>
+        <button mat-button [routerLink]="['./account']" class="btn btn-dark text-white text-right" [hidden]="!isAuthenticated">Account</button>
+        <button mat-button [routerLink]="['./logout']" class="btn btn-dark text-white text-right" [hidden]="!isAuthenticated">Logout</button>
       </div>
     </div>
   </header>

@@ -26,10 +26,10 @@ public class AccountController : ApiController
     public async Task<IActionResult> Login([FromBody] LoginModel login)
         => await ReturnOkIfEverithingIsGood(async () => await accMap.LoginUserAsync(login));
 
-    [Authorize]
     [HttpGet("Token")]
     public async Task<IActionResult> GetTokenAsync()
-        => await ReturnOkIfEverithingIsGood(accMap.GetTokenAsync);
+        => await ReturnOkIfEverithingIsGood((Func<Task<TokenModel?>>)((User.Identity?.IsAuthenticated ?? false) ? accMap.GetTokenAsync! : () => Task.FromResult(default(TokenModel))));
+
 
     [Authorize]
     [HttpPost(nameof(Logout))]
