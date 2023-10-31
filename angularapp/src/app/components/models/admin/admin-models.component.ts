@@ -7,9 +7,10 @@ import { AdminModelService } from 'src/app/services/models/admin/admin-model.ser
 import { AdminModel } from 'src/app/models/database/admin/admin-model';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { EditModelsComponent } from '../edit-models.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export abstract class AdminModelsComponent<T extends AdminModel> extends EditModelsComponent<T, string> {
-    constructor(adminModelService: AdminModelService<T>, snackBar: MatSnackBar){
-        super(adminModelService, snackBar);
+    constructor(router: Router, adminModelService: AdminModelService<T>,route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, adminModelService, route, snackBar);
     }
 }

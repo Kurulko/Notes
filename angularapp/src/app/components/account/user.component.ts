@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/database/admin/user';
 import { UserService } from 'src/app/services/models/admin/user.service';
-import { EditModelComponent } from '../edit-model.component';
+import { EditModelComponent } from '../helpers/edit-model.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -12,10 +12,14 @@ import { of } from 'rxjs';
     providers: [UserService], 
 })
 export class UserComponent extends EditModelComponent implements OnInit{
-    user: User = new User();
+    user: User|null = null;
 
     constructor(private userService: UserService, snackBar: MatSnackBar){
         super(snackBar);
+    }
+    
+    get isLoading(): boolean {
+        return this.user === null || this.user === undefined;
     }
 
     ngOnInit(): void {
@@ -27,7 +31,7 @@ export class UserComponent extends EditModelComponent implements OnInit{
     }
 
     updateUser() {
-        this.userService.updateModel(this.user)
+        this.userService.updateModel(this.user!)
             .pipe(this.catchError())
             .subscribe(_ => this.modelUpdatedSuccessfully('User'));
     }

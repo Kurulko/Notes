@@ -4,6 +4,7 @@ import { NoteItemService } from 'src/app/services/models/notes/note-item.service
 import { NoteModelsComponent } from './note-models.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'note-items-app',
@@ -11,8 +12,8 @@ import { NgModel } from '@angular/forms';
     providers: [ NoteItemService ]
 })
 export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
-    constructor(noteItemService: NoteItemService, snackBar: MatSnackBar){
-        super(noteItemService, snackBar);
+    constructor(router: Router, noteItemService: NoteItemService,route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, noteItemService, route, snackBar);
     }
 
     @ViewChild('title') 

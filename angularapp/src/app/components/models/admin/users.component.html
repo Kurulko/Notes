@@ -1,7 +1,17 @@
-<models-app title="Users" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
+<models-app title="Users" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th>UserName</th>
-        <th>Email</th>
+        <th (click)="sortArray('userName')" class="custom-cursor">
+            UserName
+            <span *ngIf="isSort('name')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
+        <th (click)="sortArray('email')" class="custom-cursor">
+            Email
+            <span *ngIf="isSort('email')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
     </ng-template>
 
     <ng-template #readOnlyTemplate let-user>

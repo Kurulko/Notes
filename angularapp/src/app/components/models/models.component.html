@@ -1,4 +1,5 @@
-<base-app [title]="title">
+<app-loader [isLoading]="isLoading" />
+<base-app [title]="title" *ngIf="!isLoading">
     <input type="button" value='Add' class="btn btn-outline-primary" (click)="addModel()" [disabled]="isEditedModel"/>
     <br />
     <show-errors />
@@ -6,19 +7,35 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
+                <th (click)="sortArray('id')" class="custom-cursor">
+                    Id
+                    <span *ngIf="isSort('id')">
+                        {{sortDirectionStr}}
+                    </span>
+                </th>
                 <ng-container [ngTemplateOutlet]="tableHeaderChild" />
                 <th></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let model of models">
+            <tr *ngFor="let model of indexViewModel!.models">
                 <ng-template [ngTemplateOutlet]="loadTemplate(model)" [ngTemplateOutletContext]="{ $implicit: model}" />
             </tr>
         </tbody>
     </table>
-
+    <br>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-6">
+            <a [routerLink]="['.']" [queryParams]="{ page: (pageNumber - 1) }" queryParamsHandling="merge" class="btn btn-outline-primary" [hidden]="!indexViewModel!.pageViewModel.hasPreviousPage">
+                Previous
+            </a>
+            <a [routerLink]="['.']" [queryParams]="{ page: (pageNumber + 1) }" queryParamsHandling="merge" class="btn btn-outline-primary" [hidden]="!indexViewModel!.pageViewModel.hasNextPage">
+                Next
+            </a>
+        </div>
+    </div>
     <ng-template #readOnlyTemplate let-model>
         <td>{{model.id}}</td>
         <ng-container *ngTemplateOutlet="readOnlyTemplateChild;

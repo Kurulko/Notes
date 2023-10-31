@@ -3,7 +3,7 @@ import { ChangePassword } from 'src/app/models/helpers/change-password';
 import { UserService } from 'src/app/services/models/admin/user.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { EditModelComponent } from '../edit-model.component';
+import { EditModelComponent } from '../helpers/edit-model.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 
 @Component({

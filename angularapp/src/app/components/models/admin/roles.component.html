@@ -1,6 +1,12 @@
-<models-app title="Roles" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
+<models-app title="Roles" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
+        [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th>Name</th>
+        <th (click)="sortArray('name')" class="custom-cursor">
+            Name
+            <span *ngIf="isSort('name')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
     </ng-template>
 
     <ng-template #readOnlyTemplate let-role>

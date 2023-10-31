@@ -1,7 +1,18 @@
-<models-app title="Notes" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
+<models-app title="Notes" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
+        [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th>Title</th>
-        <th>Description</th>
+        <th (click)="sortArray('title')" class="custom-cursor">
+            Title
+            <span *ngIf="isSort('title')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
+        <th (click)="sortArray('description')" class="custom-cursor">
+            Description
+            <span *ngIf="isSort('description')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
     </ng-template>
 
     <ng-template #readOnlyTemplate let-note>

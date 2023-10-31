@@ -9,6 +9,7 @@ import { User } from 'src/app/models/database/admin/user';
 import { UserService } from 'src/app/services/models/admin/user.service';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'users-app',
@@ -16,8 +17,8 @@ import { NgModel } from '@angular/forms';
     providers: [ UserService ]
 })
 export class UsersComponent extends AdminModelsComponent<User> {
-    constructor(userService: UserService, snackBar: MatSnackBar){
-        super(userService, snackBar);
+    constructor(router: Router, userService: UserService, route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, userService, route, snackBar);
     }
 
     @ViewChild('userName') 

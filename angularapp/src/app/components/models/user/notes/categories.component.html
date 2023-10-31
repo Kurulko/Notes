@@ -1,6 +1,12 @@
-<models-app title="Categories" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
+<models-app title="Categories" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
+        [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th>Name</th>
+        <th (click)="sortArray('name')" class="custom-cursor">
+            Name
+            <span *ngIf="isSort('name')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
     </ng-template>
     
     <ng-template #readOnlyTemplate let-category>
@@ -16,55 +22,3 @@
         </td>
     </ng-template>
 </models-app>
-
-
-<!-- <base-app title="Categories">
-    <input type="button" value='Add' class="btn btn-outline-primary" (click)="addModel()" [disabled]="isEditedModel"/>
-    <br />
-    <show-errors />
-    <br />
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let model of models">
-                <ng-template [ngTemplateOutlet]="loadTemplate(model)" [ngTemplateOutletContext]="{ $implicit: model}" />
-            </tr>
-        </tbody>
-    </table>
-
-    <ng-template #readOnlyTemplate let-model>
-        <td>{{model.id}}</td>
-        <td>{{model.name}}</td>
-        <td>
-            <input type="button" value='Change' class="btn btn-outline-warning" (click)="editModel(model)" [disabled]="isEditedModel" />
-        </td>
-        <td>
-            <input type="button" value='Delete' class="btn btn-outline-danger" (click)="deleteModel(model)" [disabled]="isEditedModel" />
-        </td>
-    </ng-template>
-
-    <ng-template #editTemplate>
-        <td>
-            <input type="number" [(ngModel)]="editedModel!.id" readonly disabled class="form-control" placeholder={{editedModel!.id}}/>
-        </td>
-        <td>
-            <input type="text" [(ngModel)]="editedModel!.name" class="form-control" placeholder="Name" required minlength="2" #name="ngModel"/>
-            <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
-                Category name must be at least 2 characters long
-            </div>
-        </td>
-        <td>
-            <button class="btn btn-outline-primary" (click)="saveModel()" [disabled]="name.invalid || !isEditedModel">Save</button>
-        </td>
-        <td>
-            <input type="button" value='Cancel' class="btn btn-outline-warning" (click)="cancel()" [disabled]="!isEditedModel"/>
-        </td>
-    </ng-template>
-</base-app> -->

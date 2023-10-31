@@ -4,7 +4,7 @@ import { Helpers } from '../../helpers/helpers';
 import { TokenViewModel } from 'src/app/models/auth/token-viewmodel';
 import { Observable, throwError  } from "rxjs";
 import { catchError } from 'rxjs/operators';
-import { EditModelComponent } from '../edit-model.component';
+import { EditModelComponent } from '../helpers/edit-model.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 

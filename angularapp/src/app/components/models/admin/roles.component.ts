@@ -7,6 +7,7 @@ import { Role } from 'src/app/models/database/admin/role';
 import { RoleService } from 'src/app/services/models/admin/role.service';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'roles-app',
@@ -14,8 +15,8 @@ import { NgModel } from '@angular/forms';
     providers: [ RoleService ]
 })
 export class RolesComponent extends AdminModelsComponent<Role> {
-    constructor(roleService: RoleService, snackBar: MatSnackBar){
-        super(roleService, snackBar);
+    constructor(router: Router, roleService: RoleService, route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, roleService, route, snackBar);
     }
 
     @ViewChild('name') 

@@ -6,6 +6,7 @@ import { CategoryService } from 'src/app/services/models/notes/category.service'
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'categories-app',
@@ -13,24 +14,14 @@ import { NgModel } from '@angular/forms';
     providers: [ CategoryService ]
 })
 export class CategoriesComponent extends NoteModelsComponent<Category> {
-    constructor(categoryService: CategoryService, snackBar: MatSnackBar){
-        super(categoryService, snackBar);
+    constructor(router: Router, categoryService: CategoryService, route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, categoryService, route, snackBar);
     }
 
     @ViewChild('name') 
     nameModel: NgModel;
 
     protected override isValidModel(): boolean {
-//         console.log(`
-// this.nameModel?.invalid: ${this.nameModel?.invalid} 
-// this.nameModel?.invalid ?? true: ${this.nameModel?.invalid  ?? true}
-// this.editedModel: ${this.editedModel}
-// !this.isEditedModel: ${!this.isEditedModel}
-// (this.nameModel?.invalid ?? true) || !this.isEditedModel: ${(this.nameModel?.invalid ?? true) || !this.isEditedModel}
-// !(this.nameModel?.invalid ?? true) || !this.isEditedModel: ${!(this.nameModel?.invalid ?? true) || !this.isEditedModel}
-
-//         `)
-
         return !(this.nameModel?.invalid ?? true);
     }
     

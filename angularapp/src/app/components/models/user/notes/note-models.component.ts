@@ -6,9 +6,10 @@ import { NoteModelService } from 'src/app/services/models/notes/note-model.servi
 import { NoteModel } from 'src/app/models/database/notes/note-model';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { EditModelsComponent } from '../../edit-models.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export abstract class NoteModelsComponent<T extends NoteModel> extends EditModelsComponent<T, number> {  
-    constructor(noteModelsService: NoteModelService<T>, snackBar: MatSnackBar){
-        super(noteModelsService, snackBar);
+    constructor(router: Router, noteModelsService: NoteModelService<T>, route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, noteModelsService, route, snackBar);
     }
 }

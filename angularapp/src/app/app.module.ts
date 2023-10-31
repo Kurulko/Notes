@@ -24,12 +24,40 @@ import { NoteItemsComponent } from './components/models/user/notes/note-items.co
 import { NoteModelsComponent } from './components/models/user/notes/note-models.component';
 import { UserComponent } from './components/account/user.component';
 import { UserPasswordComponent } from './components/account/user-password.component';
-import { BaseComponent } from './components/base.component';
+import { BaseComponent } from './components/helpers/base.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminGuard } from './helpers/canActiveteAdminGuard';
-import { EditModelComponent } from './components/edit-model.component';
-import { ShowErrorsComponent } from './components/show-errors.component';
+import { EditModelComponent } from './components/helpers/edit-model.component';
+import { ShowErrorsComponent } from './components/helpers/show-errors.component';
 import { ModelsComponent } from './components/models/models.component';
+import { LoaderComponent } from './components/helpers/loader.component';
+
+const layouts:any[] = [
+  AppComponent,
+  LeftPanelLayoutComponent,
+];
+
+const components:any[] = [
+  HomeComponent,
+  LoginComponent,
+  RegisterComponent,
+  LogoutComponent,
+  NotFoundComponent,
+  RolesComponent,
+  UsersComponent,
+  CategoriesComponent,
+  NoteItemsComponent,
+  UserComponent,
+  UserPasswordComponent,
+];
+
+const helpers:any[] = [
+  BaseComponent,
+  EditModelComponent,
+  ShowErrorsComponent, 
+  ModelsComponent,
+  LoaderComponent,
+];
 
 @NgModule({
     imports: [
@@ -45,25 +73,10 @@ import { ModelsComponent } from './components/models/models.component';
       MatSnackBarModule,
       FormsModule
     ],
-   declarations: [
-      AppComponent,
-      LeftPanelLayoutComponent,
-      HomeComponent,
-      LoginComponent,
-      RegisterComponent,
-      LogoutComponent,
-      NotFoundComponent,
-      RolesComponent,
-      UsersComponent,
-      CategoriesComponent,
-      NoteItemsComponent,
-      UserComponent,
-      UserPasswordComponent,
-      BaseComponent,
-      EditModelComponent,
-      ShowErrorsComponent, 
-      ModelsComponent
-    ],
+    declarations: 
+      layouts
+        .concat(components)
+        .concat(helpers),
     bootstrap: [ AppComponent ],
     providers: [ AuthGuard, AdminGuard ],
     schemas: [NO_ERRORS_SCHEMA]
