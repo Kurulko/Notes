@@ -32,15 +32,15 @@ export abstract class ModelsService<T extends DbModel, K extends string|number> 
     }
 
     protected sortAndPadingUrlStr(path:string, attribute?:string, orderBy?:string, pageNumber?:number, pageSize?:number) : string{
-        const attributeStr = this.getModelStr(attribute, 'attribute');
-        const orderByStr = this.getModelStr(orderBy, 'orderBy');
-        const pageNumberStr = this.getModelStr(pageNumber, 'pageNumber');
-        const pageSizeStr = this.getModelStr(pageSize, 'pageSize');
+        const attributeStr = this.getModelStr(attribute, 'attribute', true);
+        const orderByStr = this.getModelStr(orderBy, 'orderBy', !attribute);
+        const pageNumberStr = this.getModelStr(pageNumber, 'pageNumber', !(attribute || orderBy));
+        const pageSizeStr = this.getModelStr(pageSize, 'pageSize', !(attribute || orderBy || pageNumber));
 
         return `${path}?${attributeStr}${orderByStr}${pageNumberStr}${pageSizeStr}`;
     }
 
-    private getModelStr(model:string|number|undefined, nameStr: string):string{
-         return model ? `${nameStr}=${model}&` : '';
+    private getModelStr(model:string|number|undefined, nameStr: string, isFirstOne: boolean = false):string{
+         return model ? `${isFirstOne ? "" : "&"}${nameStr}=${model}` : '';
     }
 }

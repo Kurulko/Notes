@@ -10,9 +10,9 @@ public class CategoryMap : NoteModelMap<Category, CategoryViewModel>, ICategoryM
     public CategoryMap(ICategoryService categoryService) : base(categoryService) { }
 
     protected override Category ConvertFromViewModel(CategoryViewModel viewModel)
-        => (Category)viewModel;
+        => (Category)viewModel!;
 
     protected override CategoryViewModel ConvertToViewModel(Category model)
-        => (CategoryViewModel)model;
+        => (CategoryViewModel)model!;
 
 }

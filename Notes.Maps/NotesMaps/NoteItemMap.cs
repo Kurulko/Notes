@@ -10,8 +10,8 @@ public class NoteItemMap : NoteModelMap<NoteItem, NoteItemViewModel>, INoteItemM
     public NoteItemMap(INoteItemService noteItemService) : base(noteItemService) { }
 
     protected override NoteItem ConvertFromViewModel(NoteItemViewModel viewModel)
-        => (NoteItem)viewModel;
+        => (NoteItem)viewModel!;
 
     protected override NoteItemViewModel ConvertToViewModel(NoteItem model)
-        => (NoteItemViewModel)model;
+        => (NoteItemViewModel)model!;
 }

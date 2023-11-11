@@ -17,7 +17,10 @@ import { ActivatedRoute, Router } from '@angular/router';
     providers: [ UserService ]
 })
 export class UsersComponent extends AdminModelsComponent<User> {
-    constructor(router: Router, userService: UserService, route: ActivatedRoute, snackBar: MatSnackBar){
+
+    currentUserId: string;
+
+    constructor(router: Router, private userService: UserService, route: ActivatedRoute, snackBar: MatSnackBar){
         super(router, userService, route, snackBar);
     }
 
@@ -29,5 +32,23 @@ export class UsersComponent extends AdminModelsComponent<User> {
 
     protected override isValidModel(): boolean {
         return !(this.userNameModel?.invalid || this.emailModel?.invalid);
+    }
+
+    impersonate(id:string){
+        this.userService.changeUsedUserId(id)
+            .pipe(this.catchError())
+            .subscribe(_ => {
+                this.showSnackbar("Impersonation mode is enabled");
+                this.redirectToHome();
+            });
+    }
+
+    override ngOnInit(): void {
+        super.ngOnInit();
+
+        this.userService.getUsedUserId().subscribe((currentUserId: string|undefined) => {
+            if(currentUserId)
+                this.currentUserId = currentUserId
+        });
     }
 }

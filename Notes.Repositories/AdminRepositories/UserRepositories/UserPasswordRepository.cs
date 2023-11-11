@@ -10,7 +10,7 @@ namespace Notes.Repositories.AdminRepositories.UserRepositories;
 
 public class UserPasswordRepository : BaseUserRepository, IUserPasswordRepository
 {
-    public UserPasswordRepository(UserManager<User> userManager, NotesContext db, IHttpContextAccessor httpContextAccessor) : base(userManager, db, httpContextAccessor)
+    public UserPasswordRepository(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(userManager, httpContextAccessor)
     { }
 
     public async Task AddUserPasswordAsync(ModelWithUserId<string> model)

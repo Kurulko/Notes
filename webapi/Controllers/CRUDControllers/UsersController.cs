@@ -40,16 +40,6 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
         => await userMap.GetUserIdByUserNameAsync(userName);
 
     [AllowAnonymous]
-    [HttpGet("current-username")]
-    public async Task<string?> GetCurrentUserNameAsync()
-        => await CheckAccess(userMap.GetCurrentUserNameAsync);
-
-    [AllowAnonymous]
-    [HttpGet("is-impersonating")]
-    public async Task<bool> IsImpersonating()
-        => await CheckAccess(userMap.IsImpersonating);
-
-    [AllowAnonymous]
     public override async Task<UserViewModel?> GetModelByIdAsync(string key)
         => await CheckAccessForUser(key, () => base.GetModelByIdAsync(key));
 
@@ -67,13 +57,30 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
 
     #region UsedUser
 
+    [AllowAnonymous]
+    [HttpGet("used-username")]
+    public async Task<string?> GetUsedUserNameAsync()
+    => await CheckAccess(userMap.GetUsedUserNameAsync);
+
+    [AllowAnonymous]
+    [HttpGet("used-userid")]
+    public async Task<string?> GetUsedUserIdAsync()
+        => await CheckAccess(userMap.GetUsedUserIdAsync);
+
+    [AllowAnonymous]
+    [HttpGet("is-impersonating")]
+    public async Task<bool> IsImpersonating()
+        => await userMap.IsImpersonating();
+    //=> await CheckAccess(userMap.IsImpersonating);
+
     [HttpGet("usedUser")]
     public virtual async Task<UserViewModel> GetUsedUserAsync()
         => await userMap.GetUsedUserAsync();
 
     [HttpPut("change-used-userId")]
-    public async Task ChangeUsedUserIdAsync([FromForm] string usedUserId)
+    public async Task ChangeUsedUserIdAsync([FromBody] string usedUserId)
         => await ReturnOkIfEverithingIsGood(async () => await userMap.ChangeUsedUserIdAsync(usedUserId));
+
 
     [HttpDelete("drop-used-userId")]
     public async Task DropUsedUserIdAsync()
@@ -82,6 +89,7 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
     #endregion
 
     const string pathToUserNoteItems = "user-noteitems";
+    const string pathToUserCategories = "user-categories";
     const string pathToUnnecessaryUserId = "{userId?}";
 
     #region UserModels
@@ -89,7 +97,16 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
     [AllowAnonymous]
     [HttpGet($"{pathToUserNoteItems}/{pathToUnnecessaryUserId}")]
     public virtual async Task<IndexViewModel<NoteItemViewModel>?> GetUserNoteItemsAsync([FromQuery] string? attribute, [FromQuery] string? orderBy, [FromQuery] int? pageNumber, [FromQuery] int? pageSize, string? userId = null)
-        => await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
+    {
+        var models = await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
+        return models;
+    }
+    //=> await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
+    
+    [AllowAnonymous]
+    [HttpGet($"{pathToUserCategories}/{pathToUnnecessaryUserId}")]
+    public virtual async Task<IndexViewModel<CategoryViewModel>?> GetUserCategoriesAsync([FromQuery] string? attribute, [FromQuery] string? orderBy, [FromQuery] int? pageNumber, [FromQuery] int? pageSize, string? userId = null)
+        => await CheckAccess(() => userMap.GetUserCategoriesAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
     
     #endregion
 

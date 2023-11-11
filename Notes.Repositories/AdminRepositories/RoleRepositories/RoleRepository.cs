@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Notes.Interfaces.Repositories.AdminRepositories.RoleRepositories;
 using Notes.Models.Context;
 using Notes.Models.Database.AdminModels;
@@ -9,7 +10,7 @@ namespace Notes.Repositories.AdminRepositories.RoleRepositories;
 public class RoleRepository : AdminModelRepository<Role>, IRoleRepository
 {
     readonly RoleManager<Role> roleManager;
-    public RoleRepository(RoleManager<Role> roleManager, NotesContext db) : base(db)
+    public RoleRepository(RoleManager<Role> roleManager) : base(roleManager.Roles)
         => this.roleManager = roleManager;
 
     public override async Task<Role> AddModelAsync(Role model)
@@ -25,14 +26,8 @@ public class RoleRepository : AdminModelRepository<Role>, IRoleRepository
             await roleManager.DeleteAsync(role);
     }
 
-    public override async Task<IEnumerable<Role>> GetAllModelsAsync()
-        => await dbAdminModels.ToListAsync();
-
-    public override async Task<Role?> GetModelByIdAsync(string key)
-        => await dbAdminModels.SingleOrDefaultAsync(u => u.Id == key);
-
     public async Task<Role?> GetRoleByNameAsync(string name)
-        => await roleManager.FindByNameAsync(name);
+        => (await GetAllModelsAsync()).SingleOrDefault(m => m.Name.ToLower() == name.ToLower());
 
     public override async Task UpdateModelAsync(Role model)
         => await roleManager.UpdateAsync(model);

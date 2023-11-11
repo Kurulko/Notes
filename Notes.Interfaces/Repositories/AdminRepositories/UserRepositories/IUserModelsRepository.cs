@@ -6,6 +6,6 @@ using Notes.ViewModels;
 
 namespace Notes.Interfaces.Repositories.AdminRepositories.UserRepositories;
 
-public interface IUserModelsRepository : IUserModelsPrimary<User, NoteItem>
+public interface IUserModelsRepository : IUserModelsPrimary<User, NoteItem, Category>
 {
 }

@@ -4,12 +4,12 @@
     <br />
     <show-errors />
     <br />
-    <table class="table table-hover">
+    <table class="table table-hover" [hidden]="isEmpty">
         <thead>
             <tr>
-                <th (click)="sortArray('id')" class="custom-cursor">
+                <th (click)="sortArray('id')" [class]="getCSSClass">
                     Id
-                    <span *ngIf="isSort('id')">
+                    <span [hidden]="!isOverOneElement" *ngIf="isSort('id')">
                         {{sortDirectionStr}}
                     </span>
                 </th>
@@ -50,7 +50,7 @@
 
     <ng-template #editTemplate>
         <td>
-            <input type="number" [(ngModel)]="editedModel!.id" readonly disabled class="form-control" placeholder='ID'/>
+            <input type="number" [(ngModel)]="editedModel!.id" readonly disabled class="form-control" placeholder='{{editedModel!.id}}'/>
         </td>
         <ng-container *ngTemplateOutlet="editTemplateChild;
             context: {$implicit: editedModel}" />

@@ -37,14 +37,14 @@ public class UserManager : AdminModelManager<User>, IUserService
     public async Task DropUsedUserIdAsync()
         => await userRepository.DropUsedUserIdAsync();
 
-    public async Task<string?> GetCurrentUserNameAsync()
-        => await userRepository.GetCurrentUserNameAsync();
-
     public async Task<IEnumerable<string>> GetRolesAsync(string? userId)
         => await userRepository.GetRolesAsync(userId);
 
     public async Task<User> GetUsedUserAsync()
         => await userRepository.GetUsedUserAsync();
+
+    public async Task<string> GetUsedUserNameAsync()
+        => await userRepository.GetUsedUserNameAsync();
 
     public async Task<string> GetUsedUserIdAsync()
         => await userRepository.GetUsedUserIdAsync();
@@ -60,6 +60,8 @@ public class UserManager : AdminModelManager<User>, IUserService
 
     public async Task<IndexViewModel<NoteItem>> GetUserNoteItemsAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
         => await userRepository.GetUserNoteItemsAsync(attribute, orderBy, pageSize, pageNumber, userId);
+    public async Task<IndexViewModel<Category>> GetUserCategoriesAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
+        => await userRepository.GetUserCategoriesAsync(attribute, orderBy, pageSize, pageNumber, userId);
 
     public async Task<IEnumerable<User>> GetUsersByRoleAsync(string roleName)
         => await userRepository.GetUsersByRoleAsync(roleName);

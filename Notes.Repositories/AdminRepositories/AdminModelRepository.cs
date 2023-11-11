@@ -13,13 +13,17 @@ namespace Notes.Repositories.AdminRepositories;
 
 public abstract class AdminModelRepository<T> : IAdminModelRepository<T> where T : class, IAdminModel
 {
-    protected readonly DbSet<T> dbAdminModels;
-    public AdminModelRepository(NotesContext db)
-        => dbAdminModels = db.Set<T>();
+    protected IQueryable<T> dbAdminModels;
+    public AdminModelRepository(IQueryable<T> dbAdminModels)
+        => this.dbAdminModels = dbAdminModels;
 
     public abstract Task<T> AddModelAsync(T model);
     public abstract Task DeleteModelAsync(string key);
-    public abstract Task<IEnumerable<T>> GetAllModelsAsync();
-    public abstract Task<T?> GetModelByIdAsync(string key);
     public abstract Task UpdateModelAsync(T model);
+
+    public virtual async Task<IEnumerable<T>> GetAllModelsAsync()
+        => await dbAdminModels.ToListAsync();
+
+    public virtual async Task<T?> GetModelByIdAsync(string key)
+        => (await GetAllModelsAsync()).SingleOrDefault(m => m.Id == key);
 }

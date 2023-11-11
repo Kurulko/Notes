@@ -13,17 +13,12 @@ public class BaseUserRepository : AdminModelRepository<User>, IBaseUserRepositor
 {
     protected readonly IHttpContextAccessor httpContextAccessor;
     protected readonly UserManager<User> userManager;
-    protected readonly NotesContext db;
-    public BaseUserRepository(UserManager<User> userManager, NotesContext db, IHttpContextAccessor httpContextAccessor) : base(db)
+
+    public BaseUserRepository(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(userManager.Users)
     {
         this.userManager = userManager;
         this.httpContextAccessor = httpContextAccessor;
-        this.db = db;
-
-        //getModels = dbAdminModels;
     }
-
-    //protected IQueryable<User> getModels;
 
     public override async Task<User> AddModelAsync(User model)
     {
@@ -36,31 +31,9 @@ public class BaseUserRepository : AdminModelRepository<User>, IBaseUserRepositor
         return existingUser;
     }
 
-    object ReturnDbNullIfValueIsNull(object? value)
-        => value ?? DBNull.Value;
     public override async Task UpdateModelAsync(User model)
-    {
-        string updateSql = "UPDATE AspNetUsers " +
-            "SET UserName = @UserName, NormalizedUserName = @NormalizedUserName, Email = @Email,  UsedUserId = @UsedUserId " +
-            "WHERE Id = @Id";
+        => await userManager.UpdateAsync(model);
 
-        SqlParameter[] sqlParameters = {
-            new SqlParameter("@UserName", model.UserName),
-            new SqlParameter("@NormalizedUserName", model.UserName!.ToUpper()),
-            new SqlParameter("@Email", ReturnDbNullIfValueIsNull(model.Email)),
-            new SqlParameter("@UsedUserId", ReturnDbNullIfValueIsNull(model.UsedUserId)),
-            new SqlParameter("@Id", model.Id)
-        };
-
-        await db.Database.ExecuteSqlRawAsync(updateSql, sqlParameters);
-    }
-
-    public override async Task<IEnumerable<User>> GetAllModelsAsync()
-        => await userManager.Users.ToListAsync();
-        //=> await getModels.AsNoTracking().ToListAsync();
-
-    public override async Task<User?> GetModelByIdAsync(string key)
-        => await userManager.FindByIdAsync(key);
 
     public override async Task DeleteModelAsync(string key)
     {
@@ -77,7 +50,7 @@ public class BaseUserRepository : AdminModelRepository<User>, IBaseUserRepositor
         => (await GetUserByNameAsync(userName))?.Id;
 
     public async Task<User?> GetUserByNameAsync(string name)
-        => await userManager.Users.SingleOrDefaultAsync(u => u.UserName == name);
+        => (await GetAllModelsAsync()).SingleOrDefault(u => u.UserName.ToLower() == name.ToLower());
 
     protected async Task<User> GetUserByIdAsync(string userId)
     {

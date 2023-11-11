@@ -9,7 +9,7 @@ namespace Notes.Repositories.AdminRepositories.UserRepositories;
 
 public class UserRolesRepository : BaseUserRepository, IUserRolesRepository
 {
-    public UserRolesRepository(UserManager<User> userManager, NotesContext db, IHttpContextAccessor httpContextAccessor) : base(userManager, db, httpContextAccessor)
+    public UserRolesRepository(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(userManager, httpContextAccessor)
     { }
 
     public async Task AddRoleToUserAsync(ModelWithUserId<string> model)

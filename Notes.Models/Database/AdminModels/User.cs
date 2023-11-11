@@ -10,6 +10,7 @@ public class User : IdentityUser, IAdminModel, IUserBase
     public string? UsedUserId { get; set; }
 
     public IEnumerable<NoteItem>? NoteItems { get; set; }
+    public IEnumerable<Category>? Categories { get; set; }
 
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }

@@ -1,15 +1,21 @@
 <models-app title="Notes" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
         [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th (click)="sortArray('title')" class="custom-cursor">
+        <th (click)="sortArray('title')" [class]="getCSSClass">
             Title
-            <span *ngIf="isSort('title')">
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('title')">
                 {{sortDirectionStr}}
             </span>
         </th>
-        <th (click)="sortArray('description')" class="custom-cursor">
+        <th (click)="sortArray('description')" [class]="getCSSClass">
             Description
-            <span *ngIf="isSort('description')">
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('description')">
+                {{sortDirectionStr}}
+            </span>
+        </th>
+        <th (click)="sortArray('category.name')" [class]="getCSSClass">
+            Category
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('category.name')">
                 {{sortDirectionStr}}
             </span>
         </th>
@@ -18,6 +24,7 @@
     <ng-template #readOnlyTemplate let-note>
         <td>{{note.title}}</td>
         <td>{{note.description}}</td>
+        <td>{{note.category?.name}}</td>
     </ng-template>
     
     <ng-template #editTemplate let-note>
@@ -31,6 +38,17 @@
             <input type="text" [(ngModel)]="note.description" class="form-control" placeholder="Description" minlength="5" #description="ngModel"/>
             <div [hidden]="description.valid || description.untouched" class="alert alert-danger">
                 Description must be at least 5 characters long
+            </div>
+        </td>
+        <td>
+            <select [(ngModel)]="note.categoryId" class="form-control"  #category="ngModel" aria-label="Select category">
+                <option disabled selected hidden [ngValue]="undefined">Choose category</option>
+                <option *ngFor="let category of categories" [ngValue]="category.id">
+                    {{category.name}}
+                  </option>
+            </select>
+            <div [hidden]="category.valid || category.untouched" class="alert alert-danger">
+                Choose category
             </div>
         </td>
     </ng-template>

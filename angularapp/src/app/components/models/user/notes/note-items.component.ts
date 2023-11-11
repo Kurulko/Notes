@@ -5,16 +5,21 @@ import { NoteModelsComponent } from './note-models.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/services/models/admin/user.service';
+import { Observable } from 'rxjs';
+import { IndexViewModel } from 'src/app/models/helpers/index-view-model';
+import { Category } from 'src/app/models/database/notes/category';
 
 @Component({
     selector: 'note-items-app',
     templateUrl: './note-items.component.html',
-    providers: [ NoteItemService ]
+    providers: [ NoteItemService, UserService ]
 })
 export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
-    constructor(router: Router, noteItemService: NoteItemService,route: ActivatedRoute, snackBar: MatSnackBar){
-        super(router, noteItemService, route, snackBar);
+    constructor(router: Router, userService: UserService, noteItemService: NoteItemService,route: ActivatedRoute, snackBar: MatSnackBar){
+        super(router, userService, noteItemService, route, snackBar);
     }
+    categories: Category[] = [];
 
     @ViewChild('title') 
     titleModel: NgModel;
@@ -22,7 +27,23 @@ export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
     @ViewChild('description') 
     descriptionModel: NgModel;
 
+    @ViewChild('category') 
+    categoryModel: NgModel;
+
     protected override isValidModel(): boolean {
-        return !(this.titleModel?.invalid || this.descriptionModel?.invalid);
+        return !(this.titleModel?.invalid || this.descriptionModel?.invalid || this.categoryModel?.invalid);
+    }
+
+    protected override getUserModels(attribute?: string | undefined, orderBy?: string | undefined, pageNumber?: number | undefined, pageSize?: number | undefined): Observable<IndexViewModel<NoteItem>> {
+        return this.userService.getUserNoteItems(attribute, orderBy, pageNumber, pageSize);
+    }
+
+    override ngOnInit(): void {
+        super.ngOnInit();
+
+        this.userService.getUserCategories().subscribe((indexViewCategories: IndexViewModel<Category>|null) => {
+            if(indexViewCategories)
+                this.categories = indexViewCategories.models;
+        });
     }
 }

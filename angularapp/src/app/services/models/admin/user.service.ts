@@ -10,6 +10,7 @@ import { ChangePassword } from 'src/app/models/helpers/change-password';
 import { ModelWithUserId } from 'src/app/models/helpers/model-with-userid';
 import { Role } from 'src/app/models/database/admin/role';
 import { NoteModel } from 'src/app/models/database/notes/note-model';
+import { Category } from 'src/app/models/database/notes/category';
 
 @Injectable()
 export class UserService extends AdminModelService<User> {
@@ -18,11 +19,15 @@ export class UserService extends AdminModelService<User> {
     }
 
     getUserIdByUserName(userName:string) : Observable<string>{
-        return this.returnModel(this.webClient.get<string>(`userid-by-name/${userName}`));
+        return this.returnModel(this.webClient.getText(`userid-by-name/${userName}`));
     }
 
-    getCurrentUserName() : Observable<string>{
-        return this.returnModel(this.webClient.get<string>(`current-username`));
+    getUsedUserName() : Observable<string>{
+        return this.returnModel(this.webClient.getText(`used-username`));
+    }
+
+    getUsedUserId() : Observable<string> {
+        return this.returnModel(this.webClient.getText(`used-userid`));
     }
 
     isImpersonating() : Observable<boolean>{
@@ -46,7 +51,7 @@ export class UserService extends AdminModelService<User> {
     }
 
     changeUsedUserId(usedUserId: string) : Observable<Object>{
-        return this.returnModel(this.webClient.put(`change-used-userId`, usedUserId));
+        return this.returnModel(this.webClient.put(`change-used-userId`, `"${usedUserId}"`));
     }
 
     dropUsedUserId() : Observable<Object>{
@@ -58,7 +63,11 @@ export class UserService extends AdminModelService<User> {
     }
     
     getUserNoteItems(attribute?:string, orderBy?:string, pageNumber?:number, pageSize?:number, userId?:string) : Observable<IndexViewModel<NoteItem>>{
-        return this.getUserModels(`user-noteitems`, attribute, orderBy, pageNumber, pageSize, userId);
+        return this.getUserModels<NoteItem>(`user-noteitems`, attribute, orderBy, pageNumber, pageSize, userId);
+    }
+
+    getUserCategories(attribute?:string, orderBy?:string, pageNumber?:number, pageSize?:number, userId?:string) : Observable<IndexViewModel<Category>>{
+        return this.getUserModels<Category>(`user-categories`, attribute, orderBy, pageNumber, pageSize, userId);
     }
 
     hasPassword(userId:string) : Observable<boolean>{

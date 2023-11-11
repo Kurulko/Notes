@@ -1,22 +1,26 @@
 <models-app title="Users" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th (click)="sortArray('userName')" class="custom-cursor">
+        <th (click)="sortArray('userName')" [class]="getCSSClass">
             UserName
-            <span *ngIf="isSort('name')">
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('userName')">
                 {{sortDirectionStr}}
             </span>
         </th>
-        <th (click)="sortArray('email')" class="custom-cursor">
+        <th (click)="sortArray('email')" [class]="getCSSClass">
             Email
-            <span *ngIf="isSort('email')">
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('email')">
                 {{sortDirectionStr}}
             </span>
         </th>
+        <th></th>
     </ng-template>
 
     <ng-template #readOnlyTemplate let-user>
         <td>{{user.userName}}</td>
         <td>{{user.email}}</td>
+        <td>
+            <input type="button" value='Impersonate' class="btn btn-outline-warning" (click)="impersonate(user.id)" [hidden]="currentUserId === user.id"/>
+        </td>
     </ng-template>
     
     <ng-template #editTemplate let-user>

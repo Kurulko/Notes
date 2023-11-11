@@ -4,6 +4,7 @@ using Notes.WebApi.Providers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
@@ -22,9 +23,13 @@ services.AddUserServices();
 services.AddAccountServices();
 services.AddNotesModelServices();
 
-services.AddControllers().AddNewtonsoftJson(options =>
-      options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-   );
+services.AddControllers();
+    //.AddJsonOptions(options =>
+    //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+    //).
+    //AddNewtonsoftJson(options => 
+    //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    //);
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 

@@ -6,10 +6,5 @@ public class Category : NoteModel, ICategoryBase
 {
     public string Name { get; set; } = null!;
 
-    public long? NoteItemId { get; set; }
-    public NoteItem? NoteItem { get; set; }
-
-    public long? ParentCategoryId { get; set; }
-    public Category? ParentCategory { get; set; }
-    public IEnumerable<Category>? Categories { get; set; }
+    public IEnumerable<NoteItem>? NoteItems { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Notes.Interfaces.Repositories.NotesRepositories;
+using Notes.Interfaces.Services.AdminServices.UserServices;
 using Notes.Models.Context;
 using Notes.Models.Database.NotesModels;
 
@@ -7,11 +8,13 @@ namespace Notes.Repositories.NotesRepositories;
 
 public abstract class NoteModelRepository<T> : INoteModelRepository<T> where T : NoteModel 
 {
+    protected readonly IUserService userService;
     protected readonly NotesContext db;
     protected readonly DbSet<T> dbSet;
-    public NoteModelRepository(NotesContext db)
+    public NoteModelRepository(NotesContext db, IUserService userService)
     {
         this.db = db;
+        this.userService = userService;
         dbSet = db.Set<T>();
     }
 
@@ -23,6 +26,8 @@ public abstract class NoteModelRepository<T> : INoteModelRepository<T> where T :
         var existingModel = await GetModelByIdAsync(model.Id);
         if (existingModel is null)
         {
+            model.UserId = await userService.GetUsedUserIdAsync();
+            
             await dbSet.AddAsync(model);
             await SaveChangesAsync();
             return model;
@@ -48,6 +53,8 @@ public abstract class NoteModelRepository<T> : INoteModelRepository<T> where T :
 
     public virtual async Task UpdateModelAsync(T model)
     {
+        model.UserId = await userService.GetUsedUserIdAsync();
+        
         dbSet.Update(model);
         await SaveChangesAsync();
     }

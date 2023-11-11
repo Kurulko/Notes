@@ -5,6 +5,6 @@ using Notes.Models.Database.NotesModels;
 
 namespace Notes.Interfaces.Services.AdminServices.UserServices;
 
-public interface IUserService : IUserPrimary<User, NoteItem>, IAdminModelService<User>
+public interface IUserService : IUserPrimary<User, NoteItem, Category>, IAdminModelService<User>
 {
 }

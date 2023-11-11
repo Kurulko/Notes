@@ -14,35 +14,45 @@ namespace Notes.Repositories.AdminRepositories.UserRepositories;
 
 public class UserModelsRepository : BaseUserRepository, IUserModelsRepository
 {
-    public UserModelsRepository(UserManager<User> userManager, NotesContext db, IHttpContextAccessor httpContextAccessor) : base(userManager, db, httpContextAccessor)
+    public UserModelsRepository(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(userManager, httpContextAccessor)
     { }
 
 
-    IndexViewModel<T> GetFilteredData<T>(IEnumerable<T> models, string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber)
+    IndexViewModel<T> GetFilteredData<T>(IEnumerable<T>? models, string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber)
         where T : NoteModel
     {
-        int countOfAllModels = models.Count();
+        int countOfAllModels = models.CountOrDefault();
 
         attribute = attribute ?? nameof(NoteModel.Id);
         orderBy = orderBy ?? OrderBy.Ascending;
         pageNumber = pageNumber ?? 1;
         pageSize = pageSize ?? countOfAllModels;
 
-        return models.OrderBy(attribute, orderBy.Value).Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value).ToIndexViewModel(countOfAllModels, pageSize, pageNumber);
+        return models.GetModelsOrEmpty().OrderBy(attribute, orderBy.Value).Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value).ToIndexViewModel(countOfAllModels, pageSize, pageNumber);
     }
 
     async Task<User> GetUsedUserIfUserIdIsNull(string? userId)
         => await (userId is null ? GetUsedUserAsync() : GetUserByIdAsync(userId));
 
-    async Task<IndexViewModel<T>> GetUserModelsByLanguageAsync<T>(Expression<Func<User, IEnumerable<T>>> include, string? userId, string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber)
+    async Task<IndexViewModel<T>> GetUserModelsAsync<T>(string? userId, string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, Expression<Func<User, IEnumerable<T>?>> include)
         where T : NoteModel
     {
-        userManager.Users.Include(include);
-        //getModels = getModels.Include(include);
+        dbAdminModels = dbAdminModels.Include(include);
+        User user = await GetUsedUserIfUserIdIsNull(userId);
+        return GetFilteredData(include.Compile()(user), attribute, orderBy, pageSize, pageNumber);
+    }
+
+    async Task<IndexViewModel<T>> GetUserModelsAsync<T, T2>(string? userId, string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, Expression<Func<User, IEnumerable<T>?>> include, Expression<Func<T, T2>> thenInclude)
+        where T : NoteModel
+    {
+        dbAdminModels = dbAdminModels.Include(include)!.ThenInclude(thenInclude);
         User user = await GetUsedUserIfUserIdIsNull(userId);
         return GetFilteredData(include.Compile()(user), attribute, orderBy, pageSize, pageNumber);
     }
 
     public async Task<IndexViewModel<NoteItem>> GetUserNoteItemsAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
-       => await GetUserModelsByLanguageAsync(u => u.NoteItems!, userId, attribute, orderBy, pageSize, pageNumber);
+        => await GetUserModelsAsync(userId, attribute, orderBy, pageSize, pageNumber, u => u.NoteItems, n => n.Category);
+
+    public async Task<IndexViewModel<Category>> GetUserCategoriesAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
+         => await GetUserModelsAsync(userId, attribute, orderBy, pageSize, pageNumber, u => u.Categories);
 }

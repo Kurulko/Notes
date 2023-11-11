@@ -8,16 +8,13 @@ namespace Notes.Repositories.AdminRepositories.UserRepositories;
 
 public class UsedUserRepository : BaseUserRepository, IUsedUserRepository
 {
-    public UsedUserRepository(UserManager<User> userManager, NotesContext db, IHttpContextAccessor httpContextAccessor) : base(userManager, db, httpContextAccessor)
+    public UsedUserRepository(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(userManager, httpContextAccessor)
     { }
-
-    public async Task<string?> GetCurrentUserNameAsync()
-        => (await GetUsedUserAsync())?.UserName;
 
     public async Task ChangeUsedUserIdAsync(string usedUserId)
     {
         User? user = await GetCurrentUserAsync();
-        if (user is not null && !string.IsNullOrEmpty(usedUserId))
+        if (user is not null && !string.IsNullOrEmpty(usedUserId) && usedUserId != user.Id)
         {
             user.UsedUserId = usedUserId;
             await UpdateModelAsync(user);
@@ -39,6 +36,8 @@ public class UsedUserRepository : BaseUserRepository, IUsedUserRepository
 
     public new async Task<string> GetUsedUserIdAsync()
         => await base.GetUsedUserIdAsync();
+    public async Task<string> GetUsedUserNameAsync()
+        => (await GetUsedUserAsync())!.UserName;
 
     public async Task<bool> IsImpersonating()
         => !string.IsNullOrEmpty((await GetCurrentUserAsync())?.UsedUserId);

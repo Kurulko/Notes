@@ -79,37 +79,52 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
         return this.editedModel != null;
     }
       
+    get isEmpty(): boolean {
+        return this.indexViewModel?.models?.length === 0 ?? true;
+    }
+
     get isLoading(): boolean {
         return this.indexViewModel === null || this.indexViewModel === undefined;
     }
 
+    get isOverOneElement(): boolean {
+        return (this.indexViewModel?.models?.length ?? 0) > 1;
+    }
+
+    get getCSSClass(): string {
+        return this.isOverOneElement ? 'custom-cursor' : '';
+    }
+
     private routeSubscription: Subscription;
-    constructor(private router: Router, private route: ActivatedRoute, snackBar: MatSnackBar){
+    constructor(protected router: Router, protected route: ActivatedRoute, snackBar: MatSnackBar){
         super(snackBar);
     }
 
     sortArray(fieldName: string) {
-        if (this.attribute === fieldName) {
-            this.changeOrderBy();
-        } else {
-            this.attribute = fieldName;
-            this.attributeChange.emit(fieldName);
-            this.orderBy = OrderBy.ASC;
-        }
-
-        this.router.navigate(
-            [], 
-            {
-                queryParams:{
-                    'page': this.pageNumber, 
-                    'attribute': this.attribute,
-                    'orderBy': this.orderBy
-                }
+        if(this.isOverOneElement)
+        {
+            if (this.attribute === fieldName) {
+                this.changeOrderBy();
+            } else {
+                this.attribute = fieldName;
+                this.attributeChange.emit(fieldName);
+                this.orderBy = OrderBy.ASC;
             }
-        );
-        
-        this.orderByChange.emit(this.orderBy);
-        this.loadModels();
+
+            this.router.navigate(
+                [], 
+                {
+                    queryParams:{
+                        'page': this.pageNumber, 
+                        'attribute': this.attribute,
+                        'orderBy': this.orderBy
+                    }
+                }
+            );
+            
+            this.orderByChange.emit(this.orderBy);
+            this.loadModels();
+        }
     }
 
     private changeOrderBy(){
@@ -207,5 +222,13 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
 
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
+    }
+
+    protected redirectToHome(){
+        this.redirectTo('/');
+    }
+
+    protected redirectTo(path:string){
+        this.router.navigateByUrl(path);
     }
 }

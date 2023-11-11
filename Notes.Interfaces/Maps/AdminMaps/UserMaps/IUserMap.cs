@@ -7,6 +7,6 @@ using Notes.ViewModels.Database.NotesModels;
 
 namespace Notes.Interfaces.Maps.AdminMaps.UserMaps;
 
-public interface IUserMap : IAdminModelMap<UserViewModel>, IUserPrimary<UserViewModel, NoteItemViewModel>
+public interface IUserMap : IAdminModelMap<UserViewModel>, IUserPrimary<UserViewModel, NoteItemViewModel, CategoryViewModel>
 {
 }

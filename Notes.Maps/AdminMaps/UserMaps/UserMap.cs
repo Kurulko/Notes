@@ -39,14 +39,14 @@ public class UserMap : AdminModelMap<UserViewModel, User>, IUserMap
     public async Task DropUsedUserIdAsync()
         => await userService.DropUsedUserIdAsync();
 
-    public async Task<string?> GetCurrentUserNameAsync()
-        => await userService.GetCurrentUserNameAsync();
-
     public async Task<IEnumerable<string>> GetRolesAsync(string? userId)
         => await userService.GetRolesAsync(userId);
 
     public async Task<UserViewModel> GetUsedUserAsync()
         => ConvertToViewModel(await userService.GetUsedUserAsync());
+
+    public async Task<string> GetUsedUserNameAsync()
+        => await userService.GetUsedUserNameAsync();
 
     public async Task<string> GetUsedUserIdAsync()
         => await userService.GetUsedUserIdAsync();
@@ -71,7 +71,13 @@ public class UserMap : AdminModelMap<UserViewModel, User>, IUserMap
     public async Task<IndexViewModel<NoteItemViewModel>> GetUserNoteItemsAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
     {
         var indexNoteItems = await userService.GetUserNoteItemsAsync(attribute, orderBy, pageSize, pageNumber, userId);
-        return FromUserModelsToUserViewModels(indexNoteItems, noteItem => (NoteItemViewModel)noteItem);
+        return FromUserModelsToUserViewModels(indexNoteItems, noteItem => (NoteItemViewModel)noteItem!);
+    }
+
+    public async Task<IndexViewModel<CategoryViewModel>> GetUserCategoriesAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
+    {
+        var indexCategories = await userService.GetUserCategoriesAsync(attribute, orderBy, pageSize, pageNumber, userId);
+        return FromUserModelsToUserViewModels(indexCategories, noteItem => (CategoryViewModel)noteItem!);
     }
 
 

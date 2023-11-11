@@ -11,6 +11,10 @@ export class WebClient {
     get<T>(url:string): Observable<T> {
         return this.httpClient.get<T>(`${this.pathBase}/${url}`, this.headers);
     }
+    
+    getText(url:string): Observable<string> {
+        return this.httpClient.get(`${this.pathBase}/${url}`, {...this.headers, responseType: 'text'});
+    }
 
     delete(url:string): Observable<Object> {
         return this.httpClient.delete(`${this.pathBase}/${url}`, this.headers);

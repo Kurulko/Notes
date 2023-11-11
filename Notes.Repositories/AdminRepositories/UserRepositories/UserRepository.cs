@@ -52,9 +52,6 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAllModelsAsync()
         => await baseUserRepository.GetAllModelsAsync();
 
-    public async Task<string?> GetCurrentUserNameAsync()
-        => await usedUserRepository.GetCurrentUserNameAsync();
-
     public async Task<User?> GetModelByIdAsync(string key)
         => await baseUserRepository.GetModelByIdAsync(key);
 
@@ -66,6 +63,9 @@ public class UserRepository : IUserRepository
 
     public async Task<string> GetUsedUserIdAsync()
         => await usedUserRepository.GetUsedUserIdAsync();
+
+    public async Task<string> GetUsedUserNameAsync()
+        => await usedUserRepository.GetUsedUserNameAsync();
 
     public async Task<User?> GetUserByClaimsAsync(ClaimsPrincipal claims)
         => await baseUserRepository.GetUserByClaimsAsync(claims);
@@ -93,4 +93,7 @@ public class UserRepository : IUserRepository
 
     public async Task<IndexViewModel<NoteItem>> GetUserNoteItemsAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
         => await userModelsRepository.GetUserNoteItemsAsync(attribute, orderBy, pageSize, pageNumber, userId);
+
+    public async Task<IndexViewModel<Category>> GetUserCategoriesAsync(string? attribute, OrderBy? orderBy, int? pageSize, int? pageNumber, string? userId = null)
+        => await userModelsRepository.GetUserCategoriesAsync(attribute, orderBy, pageSize, pageNumber, userId);
 }

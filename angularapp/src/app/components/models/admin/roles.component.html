@@ -1,9 +1,9 @@
 <models-app title="Roles" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
         [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
     <ng-template #tableHeader>
-        <th (click)="sortArray('name')" class="custom-cursor">
+        <th (click)="sortArray('name')" [class]="getCSSClass">
             Name
-            <span *ngIf="isSort('name')">
+            <span [hidden]="!isOverOneElement" *ngIf="isSort('name')">
                 {{sortDirectionStr}}
             </span>
         </th>
