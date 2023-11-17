@@ -18,8 +18,9 @@ export abstract class BaseService {
         if (error instanceof HttpErrorResponse) {
             if (error.error instanceof ErrorEvent) 
                 errorsMsg = [`Error: ${error.error.message}`];
-             else 
-                errorsMsg = [`${error.status} - ${error.statusText || ''} ${error.message || ''}`];
+             else {
+                error.error.errors.Exception.forEach((e:string) => errorsMsg.push(...e.split(';')));
+            }
         } 
         else {
             error.error.errors.Exception.forEach((e:string) => errorsMsg.push(...e.split(';')));

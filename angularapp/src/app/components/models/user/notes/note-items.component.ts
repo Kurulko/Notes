@@ -19,6 +19,7 @@ export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
     constructor(router: Router, userService: UserService, noteItemService: NoteItemService,route: ActivatedRoute, snackBar: MatSnackBar){
         super(router, userService, noteItemService, route, snackBar);
     }
+
     categories: Category[] = [];
 
     @ViewChild('title') 
@@ -36,6 +37,11 @@ export class NoteItemsComponent extends NoteModelsComponent<NoteItem> {
 
     protected override getUserModels(attribute?: string | undefined, orderBy?: string | undefined, pageNumber?: number | undefined, pageSize?: number | undefined): Observable<IndexViewModel<NoteItem>> {
         return this.userService.getUserNoteItems(attribute, orderBy, pageNumber, pageSize);
+    }
+
+    override modelPreparationBeforeSaving() {
+        super.modelPreparationBeforeSaving();
+        this.editedModel!.category = null;
     }
 
     override ngOnInit(): void {

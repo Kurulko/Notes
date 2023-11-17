@@ -19,6 +19,7 @@ export abstract class AuthComponent extends EditModelComponent {
         this.getTokenViewModel()
         .pipe(this.catchError())
         .subscribe((token: TokenViewModel) => {
+            this.showSnackbar('User is successfully authorized')
             this.helpers.setToken(token);
             this.router.navigate(['/home'])
         })

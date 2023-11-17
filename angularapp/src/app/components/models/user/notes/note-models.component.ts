@@ -15,7 +15,7 @@ export abstract class NoteModelsComponent<T extends NoteModel> extends EditModel
     constructor(router: Router, protected userService: UserService, noteModelsService: NoteModelService<T>, route: ActivatedRoute, snackBar: MatSnackBar){
         super(router, noteModelsService, route, snackBar);
 
-        this.getModels = this.getUserModels;
+        this.getModels = this.getUserModels.bind(this);
     }
 
     protected abstract getUserModels(attribute?:string, orderBy?:string, pageNumber?:number, pageSize?:number): Observable<IndexViewModel<T>>;

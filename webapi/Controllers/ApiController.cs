@@ -37,7 +37,7 @@ public class ApiController : ControllerBase
         }
     }
 
-    IActionResult ReturnProblemDetails(Exception ex)
+    protected IActionResult ReturnProblemDetails(Exception ex)
     {
         Exception? innerEx = ex.InnerException;
         string errorsMessage = (innerEx is null ? ex : innerEx).Message;

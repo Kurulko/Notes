@@ -32,6 +32,9 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
     @Input() 
     isSaveModel: () => boolean;
 
+    // @Input() 
+    // modelPreparationBeforeSaving: () => void;
+
     @ViewChild('readOnlyTemplate', {static: false})
     readOnlyTemplate: TemplateRef<any>|null;
 
@@ -95,7 +98,7 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
         return this.isOverOneElement ? 'custom-cursor' : '';
     }
 
-    private routeSubscription: Subscription;
+    private routeSubscription: Subscription = new Subscription();;
     constructor(protected router: Router, protected route: ActivatedRoute, snackBar: MatSnackBar){
         super(snackBar);
     }
@@ -137,9 +140,9 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
     }
 
     ngOnInit(): void {
-       this.loadModels();
+        this.loadModels();
 
-       this.routeSubscription = this.route.queryParams.subscribe(
+        this.routeSubscription.add(this.route.queryParams.subscribe(
             params => {
                 const pageNumber = parseInt(params['page']);
                 if(pageNumber && pageNumber > 0)
@@ -155,7 +158,7 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
 
                 this.loadModels();
             }
-        );
+        ));
     }
 
     private loadModels(){
@@ -188,7 +191,14 @@ export class ModelsComponent<T extends DbModel, K extends string|number> extends
         return this.readOnlyTemplate;
     }
 
+    @Input() 
+    modelPreparationBeforeSaving():void{
+
+    }
+    
     saveModel() {
+        this.modelPreparationBeforeSaving();
+
         (this.isNewRecord ? 
             this.createModel(this.editedModel as T) : 
             this.updateModel(this.editedModel as T))

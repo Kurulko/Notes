@@ -32,8 +32,24 @@ public class BaseUserRepository : AdminModelRepository<User>, IBaseUserRepositor
     }
 
     public override async Task UpdateModelAsync(User model)
-        => await userManager.UpdateAsync(model);
+    {
+        User? existingUser = await GetModelByIdAsync(model.Id);
 
+        if (existingUser is not null)
+        {
+            if(existingUser.UserName != model.UserName)
+                await userManager.SetUserNameAsync(existingUser, model.UserName);
+
+            if (existingUser.Email != model.Email)
+                await userManager.SetEmailAsync(existingUser, model.Email);
+
+            if (existingUser.UsedUserId != model.UsedUserId)
+            {
+                existingUser.UsedUserId = model.UsedUserId;
+                await userManager.UpdateAsync(existingUser);
+            }
+        }
+    }
 
     public override async Task DeleteModelAsync(string key)
     {
@@ -41,7 +57,6 @@ public class BaseUserRepository : AdminModelRepository<User>, IBaseUserRepositor
         if (user is not null)
             await userManager.DeleteAsync(user);
     }
-
 
     public async Task<User?> GetUserByClaimsAsync(ClaimsPrincipal claims)
         => await GetUserByNameAsync(claims.Identity!.Name!);

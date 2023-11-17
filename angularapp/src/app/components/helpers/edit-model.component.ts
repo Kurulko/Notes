@@ -4,6 +4,7 @@ import { BaseComponent } from './base.component';
 import { Component, Input } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'edit-model-app',

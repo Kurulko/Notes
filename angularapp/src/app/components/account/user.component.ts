@@ -5,6 +5,8 @@ import { EditModelComponent } from '../helpers/edit-model.component';
 import { MatSnackBar  } from '@angular/material/snack-bar';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Helpers } from 'src/app/helpers/helpers';
+import { TokenViewModel } from 'src/app/models/auth/token-viewmodel';
 
 @Component({
     selector: 'user-app',
@@ -14,7 +16,7 @@ import { of } from 'rxjs';
 export class UserComponent extends EditModelComponent implements OnInit{
     user: User|null = null;
 
-    constructor(private userService: UserService, snackBar: MatSnackBar){
+    constructor(private helpers: Helpers, private userService: UserService, snackBar: MatSnackBar){
         super(snackBar);
     }
     
@@ -33,6 +35,9 @@ export class UserComponent extends EditModelComponent implements OnInit{
     updateUser() {
         this.userService.updateModel(this.user!)
             .pipe(this.catchError())
-            .subscribe(_ => this.modelUpdatedSuccessfully('User'));
+            .subscribe((token: any) => {
+                this.modelUpdatedSuccessfully('User')
+                this.helpers.setToken(token as TokenViewModel);
+            });
     }
 }

@@ -10,6 +10,9 @@ using Notes.Interfaces.Maps.AuthMaps;
 using Notes.ViewModels.Database.NotesModels;
 using Notes.Interfaces.Maps.AdminMaps.UserMaps;
 using Notes.ViewModels.Database.AdminModels;
+using Notes.Models.Database.AdminModels;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 
 namespace WebApi.Controllers.CRUDControllers;
 
@@ -17,8 +20,11 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
 {
     readonly IUserMap userMap;
     readonly IJwtMap jwtMap;
-    public UsersController(IUserMap userMap, IJwtMap jwtMap, ILogger<UsersController> logger) : base(userMap, logger)
-        => (this.userMap, this.jwtMap) = (userMap, jwtMap);
+    readonly SignInManager<User> signInManager;
+    readonly IHttpContextAccessor httpContextAccessor;
+
+    public UsersController(IUserMap userMap, IJwtMap jwtMap, ILogger<UsersController> logger, SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor) : base(userMap, logger)
+        => (this.userMap, this.jwtMap, this.signInManager, this.httpContextAccessor) = (userMap, jwtMap, signInManager, httpContextAccessor);
 
     #region User
 
@@ -26,11 +32,24 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
     public override async Task<IActionResult> UpdateModelAsync(UserViewModel model)
         => await ReturnOkIfEverithingIsGood(async () =>
         {
-            string userId = model.Id;
-            await CheckAccessForUser(userId);
+            bool isItCurrentUser = await IsItCurrentUser(model.Id);
+
+            await CheckAccessForUser(model.Id);
             await userMap.UpdateModelAsync(model);
-            string[] roles = (await userMap.GetRolesAsync(userId)).ToArray();
-            return jwtMap.GenerateJwtToken(model, roles);
+
+            UserViewModel usedUser;
+            if (isItCurrentUser)
+            {
+                usedUser = model;
+                await signInManager.SignInAsync((User)model, isPersistent: false);
+            }
+            else
+            {
+                usedUser = (await GetUserByCurrentNameAsync())!;
+            }
+
+            string[] roles = (await userMap.GetRolesAsync(usedUser.Id)).ToArray();
+            return jwtMap.GenerateJwtToken(usedUser, roles);
         });
 
 
@@ -46,7 +65,7 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
     [AllowAnonymous]
     [HttpGet("current")]
     public virtual async Task<UserViewModel?> GetUserByClaimsAsync()
-        => await CheckAccess(() => userMap.GetUsedUserAsync());
+        => await CheckAccess(userMap.GetUsedUserAsync);
 
 
     [HttpGet("name/{userName}")]
@@ -97,12 +116,8 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
     [AllowAnonymous]
     [HttpGet($"{pathToUserNoteItems}/{pathToUnnecessaryUserId}")]
     public virtual async Task<IndexViewModel<NoteItemViewModel>?> GetUserNoteItemsAsync([FromQuery] string? attribute, [FromQuery] string? orderBy, [FromQuery] int? pageNumber, [FromQuery] int? pageSize, string? userId = null)
-    {
-        var models = await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
-        return models;
-    }
-    //=> await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
-    
+        => await CheckAccess(() => userMap.GetUserNoteItemsAsync(attribute, orderBy?.ParseToOrderBy(), pageSize, pageNumber, userId));
+
     [AllowAnonymous]
     [HttpGet($"{pathToUserCategories}/{pathToUnnecessaryUserId}")]
     public virtual async Task<IndexViewModel<CategoryViewModel>?> GetUserCategoriesAsync([FromQuery] string? attribute, [FromQuery] string? orderBy, [FromQuery] int? pageNumber, [FromQuery] int? pageSize, string? userId = null)
@@ -156,11 +171,24 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
 
     #endregion
 
+    async Task<bool> IsItCurrentUser(string userId)
+    {
+        string? currentUserId = await GetUserIdByCurrentNameAsync();
+        return currentUserId == userId;
+    }
+
+    async Task<string?> GetUserIdByCurrentNameAsync()
+        => await userMap.GetUserIdByUserNameAsync(UserName!);
+
+    async Task<UserViewModel?> GetUserByCurrentNameAsync()
+        =>  await userMap.GetUserByNameAsync(UserName!);
+
+    string? UserName => UserIdentity?.Name;
+
     async Task CheckAccessForUser(string userId)
     {
-        string? userName = User.Identity?.Name;
-        string? _userId = await userMap.GetUserIdByUserNameAsync(userName!);
-        if (!(User.IsInRole(Roles.Admin) || _userId == userId))
+        string? _userId = await GetUserIdByCurrentNameAsync();
+        if (!(IsAdmin() || _userId == userId))
             AccessDenied();
     }
     async Task<T> CheckAccessForUser<T>(string userId, Func<Task<T>> actionAsync)
@@ -169,11 +197,15 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
         return await actionAsync();
     }
 
+    bool IsAdmin()
+        => User.IsInRole(Roles.Admin);
+
     void CheckAccess()
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
+        if (!UserIdentity?.IsAuthenticated ?? false)
             AccessDenied();
     }
+
     async Task<T> CheckAccess<T>(Func<Task<T>> actionAsync)
     {
         CheckAccess();
@@ -182,4 +214,6 @@ public class UsersController : AdminDbModelsController<UserViewModel, string>
 
     void AccessDenied()
         => throw new UnauthorizedAccessException("Access to this source is denied!");
+
+    IIdentity? UserIdentity => httpContextAccessor.HttpContext?.User.Identity;
 }

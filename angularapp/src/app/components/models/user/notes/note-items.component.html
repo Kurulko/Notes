@@ -1,5 +1,5 @@
 <models-app title="Notes" [(indexViewModel)]="indexViewModel" [(attribute)]="attribute" [(orderBy)]="orderBy" [errors]="errors" [isSaveModel]="isSaveModel" [getModels]="getModels" 
-        [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel">
+        [createModel]="createModel" [updateModel]="updateModel" [removeModel]="removeModel" [modelPreparationBeforeSaving]="modelPreparationBeforeSaving">
     <ng-template #tableHeader>
         <th (click)="sortArray('title')" [class]="getCSSClass">
             Title
@@ -41,7 +41,7 @@
             </div>
         </td>
         <td>
-            <select [(ngModel)]="note.categoryId" class="form-control"  #category="ngModel" aria-label="Select category">
+            <select [(ngModel)]="note.categoryId" class="form-control" aria-label="Select category" required  #category="ngModel">
                 <option disabled selected hidden [ngValue]="undefined">Choose category</option>
                 <option *ngFor="let category of categories" [ngValue]="category.id">
                     {{category.name}}
